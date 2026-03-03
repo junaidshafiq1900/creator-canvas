@@ -35,7 +35,7 @@ const Feed = () => {
     // Fetch like counts
     if (postsData.length > 0) {
       const ids = postsData.map(p => p.id);
-      const { data: likesData } = await supabase
+      const { data: likesData } = await db
         .from('post_likes')
         .select('post_id')
         .in('post_id', ids);
