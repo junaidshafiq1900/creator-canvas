@@ -96,7 +96,7 @@ const Feed = () => {
       setLikedPosts(prev => { const n = new Set(prev); n.delete(postId); return n; });
       setLikeCounts(prev => ({ ...prev, [postId]: (prev[postId] || 1) - 1 }));
     } else {
-      await supabase.from('post_likes').insert({ post_id: postId, user_id: user.id });
+      await db.from('post_likes').insert({ post_id: postId, user_id: user.id });
       setLikedPosts(prev => new Set(prev).add(postId));
       setLikeCounts(prev => ({ ...prev, [postId]: (prev[postId] || 0) + 1 }));
     }
