@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { supabase } from '@/integrations/supabase/client';
+const db = supabase as any;
 import { Skeleton } from '@/components/ui/skeleton';
 import { Users, Film, Eye, MessageSquare, FileText, Flag, Heart } from 'lucide-react';
 import { motion } from 'framer-motion';
