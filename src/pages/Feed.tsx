@@ -46,7 +46,7 @@ const Feed = () => {
 
       // Check if user liked
       if (user) {
-        const { data: myLikes } = await supabase
+        const { data: myLikes } = await db
           .from('post_likes')
           .select('post_id')
           .eq('user_id', user.id)
