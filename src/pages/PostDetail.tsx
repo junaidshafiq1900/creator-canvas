@@ -35,8 +35,8 @@ const PostDetail = () => {
       { count: likes },
     ] = await Promise.all([
       supabase.from('profiles').select('*').eq('id', postData.user_id).maybeSingle(),
-      supabase.from('post_comments').select('*, profiles:user_id(id, username, display_name, avatar_url)').eq('post_id', id).order('created_at', { ascending: true }),
-      supabase.from('post_likes').select('*', { count: 'exact', head: true }).eq('post_id', id),
+      db.from('post_comments').select('*, profiles:user_id(id, username, display_name, avatar_url)').eq('post_id', id).order('created_at', { ascending: true }),
+      db.from('post_likes').select('*', { count: 'exact', head: true }).eq('post_id', id),
     ]);
 
     setProfile(profileData);
