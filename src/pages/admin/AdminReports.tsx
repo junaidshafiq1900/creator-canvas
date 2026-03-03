@@ -20,7 +20,7 @@ const AdminReports = () => {
 
   const fetchReports = async () => {
     setLoading(true);
-    let query = supabase.from('reports').select('*', { count: 'exact' });
+    let query = db.from('reports').select('*', { count: 'exact' });
 
     if (filter !== 'all') {
       query = query.eq('status', filter);
