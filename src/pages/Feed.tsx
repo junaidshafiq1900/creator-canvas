@@ -92,7 +92,7 @@ const Feed = () => {
   const toggleLike = async (postId: string) => {
     if (!user) return;
     if (likedPosts.has(postId)) {
-      await supabase.from('post_likes').delete().eq('post_id', postId).eq('user_id', user.id);
+      await db.from('post_likes').delete().eq('post_id', postId).eq('user_id', user.id);
       setLikedPosts(prev => { const n = new Set(prev); n.delete(postId); return n; });
       setLikeCounts(prev => ({ ...prev, [postId]: (prev[postId] || 1) - 1 }));
     } else {
