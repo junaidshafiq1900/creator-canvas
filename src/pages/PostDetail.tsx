@@ -75,6 +75,7 @@ const PostDetail = () => {
       toast({ title: 'Error', description: error.message, variant: 'destructive' });
     } else {
       setCommentText('');
+      if (post?.user_id) sendNotification(user.id, post.user_id, 'comment_post', id, 'post', 'commented on your post');
       fetchPost();
     }
   };
