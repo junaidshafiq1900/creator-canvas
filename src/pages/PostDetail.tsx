@@ -64,6 +64,7 @@ const PostDetail = () => {
       await db.from('post_likes').insert({ post_id: id, user_id: user.id });
       setLiked(true);
       setLikeCount(c => c + 1);
+      if (post?.user_id) sendNotification(user.id, post.user_id, 'like_post', id, 'post', 'liked your post');
     }
   };
 
