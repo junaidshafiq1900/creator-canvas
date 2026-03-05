@@ -80,6 +80,7 @@ const Channel = () => {
       await supabase.from('subscriptions').insert({ creator_id: profile.id, follower_id: user.id });
       setFollowing(true);
       setFollowerCount(c => c + 1);
+      sendNotification(user.id, profile.id, 'follow', undefined, undefined, 'started following you');
     }
     setFollowLoading(false);
   };

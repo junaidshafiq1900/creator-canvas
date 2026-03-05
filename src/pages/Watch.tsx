@@ -97,6 +97,9 @@ const Watch = () => {
     } else {
       setComments(prev => [data, ...prev]);
       setComment('');
+      if (video?.creator_id) {
+        sendNotification(user.id, video.creator_id, 'comment_video', id, 'video', 'commented on your video');
+      }
     }
   };
 
