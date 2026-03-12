@@ -8,7 +8,7 @@ export interface SupabaseConfig {
 }
 
 export const getSupabaseConfig = (): SupabaseConfig | null => {
-  const stored = localStorage.getItem('vstream_supabase_config');
+  const stored = localStorage.getItem('joulecorp_supabase_config');
   if (stored) {
     try {
       const config = JSON.parse(stored);
