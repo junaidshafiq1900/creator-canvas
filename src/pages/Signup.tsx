@@ -49,7 +49,7 @@ const Signup = () => {
             <span className="text-primary-foreground font-black text-lg">V</span>
           </div>
           <h1 className="text-2xl font-bold text-foreground">Create your account</h1>
-          <p className="text-sm text-muted-foreground mt-1">Start creating on VSTREAM</p>
+          <p className="text-sm text-muted-foreground mt-1">Start creating on Joulecorp</p>
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-4">
