@@ -37,11 +37,11 @@ export const resetSupabaseClient = () => {
 };
 
 export const saveSupabaseConfig = (url: string, anonKey: string) => {
-  localStorage.setItem('vstream_supabase_config', JSON.stringify({ url, anonKey }));
+  localStorage.setItem('joulecorp_supabase_config', JSON.stringify({ url, anonKey }));
   resetSupabaseClient();
 };
 
 export const clearSupabaseConfig = () => {
-  localStorage.removeItem('vstream_supabase_config');
+  localStorage.removeItem('joulecorp_supabase_config');
   resetSupabaseClient();
 };

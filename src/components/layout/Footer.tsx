@@ -39,7 +39,7 @@ const Footer = () => (
         </div>
       </div>
       <div className="border-t border-border pt-6 text-center text-xs text-muted-foreground">
-        © {new Date().getFullYear()} VSTREAM. All rights reserved.
+        © {new Date().getFullYear()} Joulecorp. All rights reserved.
       </div>
     </div>
   </footer>
