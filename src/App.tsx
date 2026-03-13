@@ -22,6 +22,7 @@ import NotFound from "./pages/NotFound";
 import SearchPage from "./pages/Search";
 import Notifications from "./pages/Notifications";
 import AuthCallback from "./pages/AuthCallback";
+import Videos from "./pages/Videos";
 
 const queryClient = new QueryClient();
 
@@ -47,6 +48,7 @@ const App = () => (
             <Route path="/feed" element={<Feed />} />
             <Route path="/channel/:username" element={<Channel />} />
             <Route path="/post/:id" element={<PostDetail />} />
+            <Route path="/videos" element={<Videos />} />
             <Route path="/search" element={<SearchPage />} />
             <Route path="/notifications" element={<Notifications />} />
             <Route path="*" element={<NotFound />} />

@@ -31,9 +31,9 @@ const Index = () => {
         { data: latestData },
         { data: creatorsData },
       ] = await Promise.all([
-        supabase.from('videos').select('*, profiles:creator_id(username, display_name, avatar_url)').eq('is_disabled', false).eq('visibility', 'public').order('views', { ascending: false }).limit(8),
-        supabase.from('videos').select('*, profiles:creator_id(username, display_name, avatar_url)').eq('is_disabled', false).eq('visibility', 'public').eq('is_featured', true).order('created_at', { ascending: false }).limit(4),
-        supabase.from('videos').select('*, profiles:creator_id(username, display_name, avatar_url)').eq('is_disabled', false).eq('visibility', 'public').order('created_at', { ascending: false }).limit(8),
+        supabase.from('videos').select('*, profiles!videos_creator_id_profiles_fkey(username, display_name, avatar_url)').eq('is_disabled', false).eq('visibility', 'public').order('views', { ascending: false }).limit(12),
+        supabase.from('videos').select('*, profiles!videos_creator_id_profiles_fkey(username, display_name, avatar_url)').eq('is_disabled', false).eq('visibility', 'public').eq('is_featured', true).order('created_at', { ascending: false }).limit(4),
+        supabase.from('videos').select('*, profiles!videos_creator_id_profiles_fkey(username, display_name, avatar_url)').eq('is_disabled', false).eq('visibility', 'public').order('created_at', { ascending: false }).limit(12),
         supabase.from('profiles').select('*').order('created_at', { ascending: false }).limit(7),
       ]);
 
@@ -104,6 +104,11 @@ const Index = () => {
           <h2 className="text-xl font-bold text-foreground">Trending Now</h2>
         </div>
         {renderVideoGrid(trending.slice(0, 4))}
+        {trending.length > 4 && (
+          <div className="flex justify-center mt-4">
+            <Button variant="ghost" size="sm" asChild><Link to="/videos">View All →</Link></Button>
+          </div>
+        )}
       </section>
 
       {/* Featured */}
@@ -152,7 +157,7 @@ const Index = () => {
           <Clock className="w-5 h-5 text-primary" />
           <h2 className="text-xl font-bold text-foreground">Latest Uploads</h2>
         </div>
-        {renderVideoGrid(latest)}
+        {renderVideoGrid(latest.slice(0, 4))}
       </section>
 
       {/* More to Explore */}
