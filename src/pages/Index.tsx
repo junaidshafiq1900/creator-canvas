@@ -109,6 +109,7 @@ const Index = () => {
             <Button variant="ghost" size="sm" asChild><Link to="/videos">View All →</Link></Button>
           </div>
         )}
+      </section>
 
       {/* Featured */}
       {featured.length > 0 && (
