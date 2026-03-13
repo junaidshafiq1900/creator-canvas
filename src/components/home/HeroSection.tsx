@@ -23,7 +23,7 @@ const HeroSection = () => {
           <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-primary/10 border border-primary/20 text-primary text-xs font-medium mb-6">
             <Sparkles className="w-3 h-3" /> The future of independent streaming
           </div>
-          <h1 className="text-4xl sm:text-5xl lg:text-6xl font-black text-foreground leading-tight mb-4">
+          <h1 className="text-4xl sm:text-5xl lg:text-6xl font-black text-white leading-tight mb-4">
             Your content.{' '}
             <span className="text-gradient-primary">Your platform.</span>
           </h1>
