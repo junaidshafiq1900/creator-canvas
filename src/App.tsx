@@ -45,7 +45,7 @@ const App = () => (
             <Route path="/profile" element={<Profile />} />
             <Route path="/admin" element={<Admin />} />
             <Route path="/settings" element={<Settings />} />
-            <Route path="/feed" element={<Feed />} />
+            <Route path="/feed" element={<Navigate to="/videos" replace />} />
             <Route path="/channel/:username" element={<Channel />} />
             <Route path="/post/:id" element={<PostDetail />} />
             <Route path="/videos" element={<Videos />} />
