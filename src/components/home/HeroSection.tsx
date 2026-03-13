@@ -34,7 +34,7 @@ const HeroSection = () => {
             <Button size="lg" onClick={() => navigate('/signup')} className="glow-primary">
               <Play className="w-4 h-4 mr-2" /> Start Creating
             </Button>
-            <Button size="lg" variant="outline" onClick={() => navigate('/feed')}>
+            <Button size="lg" variant="outline" onClick={() => navigate('/videos')}>
               Explore Content
             </Button>
           </div>

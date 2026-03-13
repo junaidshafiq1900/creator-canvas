@@ -31,9 +31,9 @@ const Index = () => {
         { data: latestData },
         { data: creatorsData },
       ] = await Promise.all([
-        supabase.from('videos').select('*, profiles:creator_id(username, display_name, avatar_url)').eq('is_disabled', false).eq('visibility', 'public').order('views', { ascending: false }).limit(8),
-        supabase.from('videos').select('*, profiles:creator_id(username, display_name, avatar_url)').eq('is_disabled', false).eq('visibility', 'public').eq('is_featured', true).order('created_at', { ascending: false }).limit(4),
-        supabase.from('videos').select('*, profiles:creator_id(username, display_name, avatar_url)').eq('is_disabled', false).eq('visibility', 'public').order('created_at', { ascending: false }).limit(8),
+        supabase.from('videos').select('*, profiles!videos_creator_id_profiles_fkey(username, display_name, avatar_url)').eq('is_disabled', false).eq('visibility', 'public').order('views', { ascending: false }).limit(12),
+        supabase.from('videos').select('*, profiles!videos_creator_id_profiles_fkey(username, display_name, avatar_url)').eq('is_disabled', false).eq('visibility', 'public').eq('is_featured', true).order('created_at', { ascending: false }).limit(4),
+        supabase.from('videos').select('*, profiles!videos_creator_id_profiles_fkey(username, display_name, avatar_url)').eq('is_disabled', false).eq('visibility', 'public').order('created_at', { ascending: false }).limit(12),
         supabase.from('profiles').select('*').order('created_at', { ascending: false }).limit(7),
       ]);
 
