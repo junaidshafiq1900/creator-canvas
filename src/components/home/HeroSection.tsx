@@ -10,8 +10,8 @@ const HeroSection = () => {
   return (
     <section className="relative h-[85vh] min-h-[500px] flex items-center overflow-hidden">
       <img src={heroBg} alt="" className="absolute inset-0 w-full h-full object-cover" />
+      <div className="absolute inset-0 bg-black/60" />
       <div className="absolute inset-0" style={{ background: 'var(--gradient-hero)' }} />
-      <div className="absolute inset-0 bg-background/40" />
 
       <div className="container mx-auto px-4 relative z-10">
         <motion.div
