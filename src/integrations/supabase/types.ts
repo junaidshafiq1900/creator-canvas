@@ -310,6 +310,7 @@ export type Database = {
           id: string
           is_disabled: boolean
           is_featured: boolean
+          is_short: boolean
           storage_provider_ref: string | null
           storage_type: string | null
           tags: string[] | null
@@ -328,6 +329,7 @@ export type Database = {
           id?: string
           is_disabled?: boolean
           is_featured?: boolean
+          is_short?: boolean
           storage_provider_ref?: string | null
           storage_type?: string | null
           tags?: string[] | null
@@ -346,6 +348,7 @@ export type Database = {
           id?: string
           is_disabled?: boolean
           is_featured?: boolean
+          is_short?: boolean
           storage_provider_ref?: string | null
           storage_type?: string | null
           tags?: string[] | null
