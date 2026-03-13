@@ -15,7 +15,7 @@ import Watch from "./pages/Watch";
 import Profile from "./pages/Profile";
 import Admin from "./pages/Admin";
 import Settings from "./pages/Settings";
-import Feed from "./pages/Feed";
+import { Navigate } from 'react-router-dom';
 import Channel from "./pages/Channel";
 import PostDetail from "./pages/PostDetail";
 import NotFound from "./pages/NotFound";
@@ -45,7 +45,7 @@ const App = () => (
             <Route path="/profile" element={<Profile />} />
             <Route path="/admin" element={<Admin />} />
             <Route path="/settings" element={<Settings />} />
-            <Route path="/feed" element={<Feed />} />
+            <Route path="/feed" element={<Navigate to="/videos" replace />} />
             <Route path="/channel/:username" element={<Channel />} />
             <Route path="/post/:id" element={<PostDetail />} />
             <Route path="/videos" element={<Videos />} />

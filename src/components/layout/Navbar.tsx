@@ -1,6 +1,6 @@
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
-import { Search, Upload, Menu, X, Settings, LogOut, User, LayoutDashboard, Rss, Sun, Moon, Bell } from 'lucide-react';
+import { Search, Upload, Menu, X, Settings, LogOut, User, LayoutDashboard, Sun, Moon, Bell, Compass } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useState } from 'react';
 import { useTheme } from 'next-themes';
@@ -60,8 +60,8 @@ const Navbar = () => {
           </Button>
           {user ? (
             <>
-              <Button variant="ghost" size="sm" onClick={() => navigate('/feed')} className="text-muted-foreground hover:text-foreground">
-                <Rss className="w-4 h-4 mr-1.5" /> Feed
+              <Button variant="ghost" size="sm" onClick={() => navigate('/videos')} className="text-muted-foreground hover:text-foreground">
+                <Compass className="w-4 h-4 mr-1.5" /> Explore
               </Button>
               <Button variant="ghost" size="icon" onClick={() => navigate('/upload')} className="text-muted-foreground hover:text-primary">
                 <Upload className="w-5 h-5" />
@@ -122,7 +122,7 @@ const Navbar = () => {
             />
           </form>
           <Link to="/" onClick={() => setMobileOpen(false)} className="block py-2 text-foreground">Home</Link>
-          <Link to="/feed" onClick={() => setMobileOpen(false)} className="block py-2 text-foreground">Feed</Link>
+          <Link to="/videos" onClick={() => setMobileOpen(false)} className="block py-2 text-foreground">Explore</Link>
           {user ? (
             <>
               <Link to="/upload" onClick={() => setMobileOpen(false)} className="block py-2 text-foreground">Upload</Link>
