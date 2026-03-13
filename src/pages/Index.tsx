@@ -104,7 +104,11 @@ const Index = () => {
           <h2 className="text-xl font-bold text-foreground">Trending Now</h2>
         </div>
         {renderVideoGrid(trending.slice(0, 4))}
-      </section>
+        {trending.length > 4 && (
+          <div className="flex justify-center mt-4">
+            <Button variant="ghost" size="sm" asChild><Link to="/videos">View All →</Link></Button>
+          </div>
+        )}
 
       {/* Featured */}
       {featured.length > 0 && (

@@ -48,6 +48,7 @@ const App = () => (
             <Route path="/feed" element={<Feed />} />
             <Route path="/channel/:username" element={<Channel />} />
             <Route path="/post/:id" element={<PostDetail />} />
+            <Route path="/videos" element={<Videos />} />
             <Route path="/search" element={<SearchPage />} />
             <Route path="/notifications" element={<Notifications />} />
             <Route path="*" element={<NotFound />} />
