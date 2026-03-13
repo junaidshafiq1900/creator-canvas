@@ -22,6 +22,7 @@ import NotFound from "./pages/NotFound";
 import SearchPage from "./pages/Search";
 import Notifications from "./pages/Notifications";
 import AuthCallback from "./pages/AuthCallback";
+import Videos from "./pages/Videos";
 
 const queryClient = new QueryClient();
 
