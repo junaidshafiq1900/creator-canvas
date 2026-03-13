@@ -1,6 +1,6 @@
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
-import { Search, Upload, Menu, X, Settings, LogOut, User, LayoutDashboard, Rss, Sun, Moon, Bell } from 'lucide-react';
+import { Search, Upload, Menu, X, Settings, LogOut, User, LayoutDashboard, Sun, Moon, Bell, Compass } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useState } from 'react';
 import { useTheme } from 'next-themes';
