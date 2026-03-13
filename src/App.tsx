@@ -15,7 +15,7 @@ import Watch from "./pages/Watch";
 import Profile from "./pages/Profile";
 import Admin from "./pages/Admin";
 import Settings from "./pages/Settings";
-import Feed from "./pages/Feed";
+import { Navigate } from 'react-router-dom';
 import Channel from "./pages/Channel";
 import PostDetail from "./pages/PostDetail";
 import NotFound from "./pages/NotFound";
