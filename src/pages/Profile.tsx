@@ -42,6 +42,13 @@ const Profile = () => {
   const [newPostImage, setNewPostImage] = useState<File | null>(null);
   const [posting, setPosting] = useState(false);
 
+  // Video management
+  const [editingVideo, setEditingVideo] = useState<any>(null);
+  const [editTitle, setEditTitle] = useState('');
+  const [editDesc, setEditDesc] = useState('');
+  const [editSaving, setEditSaving] = useState(false);
+  const [deleteConfirm, setDeleteConfirm] = useState<string | null>(null);
+
   const loadData = async () => {
     if (!user) { setLoading(false); return; }
     const db = supabase as any;
