@@ -30,6 +30,8 @@ const Watch = () => {
   const [comment, setComment] = useState('');
   const [loading, setLoading] = useState(true);
   const [posting, setPosting] = useState(false);
+  const [subscribed, setSubscribed] = useState(false);
+  const [subLoading, setSubLoading] = useState(false);
 
   useEffect(() => {
     if (!id) return;
