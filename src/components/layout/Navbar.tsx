@@ -63,6 +63,9 @@ const Navbar = () => {
               <Button variant="ghost" size="sm" onClick={() => navigate('/videos')} className="text-muted-foreground hover:text-foreground">
                 <Compass className="w-4 h-4 mr-1.5" /> Explore
               </Button>
+              <Button variant="ghost" size="sm" onClick={() => navigate('/subscriptions')} className="text-muted-foreground hover:text-foreground">
+                <Users className="w-4 h-4 mr-1.5" /> Subscriptions
+              </Button>
               <Button variant="ghost" size="icon" onClick={() => navigate('/upload')} className="text-muted-foreground hover:text-primary">
                 <Upload className="w-5 h-5" />
               </Button>
