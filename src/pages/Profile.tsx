@@ -9,7 +9,8 @@ import { Textarea } from '@/components/ui/textarea';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
 import VideoCard from '@/components/video/VideoCard';
-import { User, Calendar, Users, Settings, Video, Home, FileText, Zap, Send, Image as ImageIcon, MessageSquare, Play } from 'lucide-react';
+import { User, Calendar, Users, Settings, Video, Home, FileText, Zap, Send, Image as ImageIcon, MessageSquare, Play, Pencil, Trash2, X as XIcon, Check } from 'lucide-react';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '@/components/ui/dialog';
 import { motion } from 'framer-motion';
 import { toast } from '@/hooks/use-toast';
 import { uploadFile, validateFile, ALLOWED_IMAGE_TYPES, MAX_IMAGE_SIZE } from '@/lib/storage';
@@ -40,6 +41,13 @@ const Profile = () => {
   const [newPostText, setNewPostText] = useState('');
   const [newPostImage, setNewPostImage] = useState<File | null>(null);
   const [posting, setPosting] = useState(false);
+
+  // Video management
+  const [editingVideo, setEditingVideo] = useState<any>(null);
+  const [editTitle, setEditTitle] = useState('');
+  const [editDesc, setEditDesc] = useState('');
+  const [editSaving, setEditSaving] = useState(false);
+  const [deleteConfirm, setDeleteConfirm] = useState<string | null>(null);
 
   const loadData = async () => {
     if (!user) { setLoading(false); return; }
@@ -302,7 +310,17 @@ const Profile = () => {
             {videos.length > 0 ? (
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
                 {videos.map(v => (
-                  <VideoCard key={v.id} id={v.id} title={v.title} thumbnail={v.thumbnail_url} creator={creatorName} views={formatCount(v.views || 0)} date={new Date(v.created_at).toLocaleDateString()} category={v.category} />
+                  <div key={v.id} className="relative group">
+                    <VideoCard id={v.id} title={v.title} thumbnail={v.thumbnail_url} creator={creatorName} views={formatCount(v.views || 0)} date={new Date(v.created_at).toLocaleDateString()} category={v.category} />
+                    <div className="absolute top-2 right-2 flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                      <Button size="icon" variant="secondary" className="h-7 w-7" onClick={(e) => { e.preventDefault(); setEditingVideo(v); setEditTitle(v.title); setEditDesc(v.description || ''); }}>
+                        <Pencil className="w-3 h-3" />
+                      </Button>
+                      <Button size="icon" variant="destructive" className="h-7 w-7" onClick={(e) => { e.preventDefault(); setDeleteConfirm(v.id); }}>
+                        <Trash2 className="w-3 h-3" />
+                      </Button>
+                    </div>
+                  </div>
                 ))}
               </div>
             ) : (
@@ -312,6 +330,51 @@ const Profile = () => {
                 <Button className="mt-4" onClick={() => navigate('/upload')}>Upload your first video</Button>
               </div>
             )}
+
+            {/* Edit Video Dialog */}
+            <Dialog open={!!editingVideo} onOpenChange={open => { if (!open) setEditingVideo(null); }}>
+              <DialogContent>
+                <DialogHeader><DialogTitle>Edit Video</DialogTitle></DialogHeader>
+                <div className="space-y-4">
+                  <div className="space-y-2">
+                    <Label>Title</Label>
+                    <Input value={editTitle} onChange={e => setEditTitle(e.target.value)} maxLength={200} />
+                  </div>
+                  <div className="space-y-2">
+                    <Label>Description</Label>
+                    <Textarea value={editDesc} onChange={e => setEditDesc(e.target.value)} rows={4} maxLength={2000} />
+                  </div>
+                </div>
+                <DialogFooter>
+                  <Button variant="outline" onClick={() => setEditingVideo(null)}>Cancel</Button>
+                  <Button disabled={editSaving || !editTitle.trim()} onClick={async () => {
+                    if (!editingVideo) return;
+                    setEditSaving(true);
+                    const { error } = await supabase.from('videos').update({ title: editTitle.trim(), description: editDesc.trim() || null }).eq('id', editingVideo.id);
+                    setEditSaving(false);
+                    if (error) { toast({ title: 'Error', description: error.message, variant: 'destructive' }); }
+                    else { setEditingVideo(null); loadData(); toast({ title: 'Video updated!' }); }
+                  }}>{editSaving ? 'Saving...' : 'Save'}</Button>
+                </DialogFooter>
+              </DialogContent>
+            </Dialog>
+
+            {/* Delete Confirm Dialog */}
+            <Dialog open={!!deleteConfirm} onOpenChange={open => { if (!open) setDeleteConfirm(null); }}>
+              <DialogContent>
+                <DialogHeader><DialogTitle>Delete Video?</DialogTitle></DialogHeader>
+                <p className="text-sm text-muted-foreground">This action cannot be undone. The video will be permanently deleted.</p>
+                <DialogFooter>
+                  <Button variant="outline" onClick={() => setDeleteConfirm(null)}>Cancel</Button>
+                  <Button variant="destructive" onClick={async () => {
+                    if (!deleteConfirm) return;
+                    const { error } = await supabase.from('videos').delete().eq('id', deleteConfirm);
+                    if (error) { toast({ title: 'Error', description: error.message, variant: 'destructive' }); }
+                    else { setDeleteConfirm(null); loadData(); toast({ title: 'Video deleted' }); }
+                  }}>Delete</Button>
+                </DialogFooter>
+              </DialogContent>
+            </Dialog>
           </TabsContent>
 
           {/* SHORTS TAB */}
