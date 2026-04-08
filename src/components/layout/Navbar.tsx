@@ -129,6 +129,7 @@ const Navbar = () => {
           </form>
           <Link to="/" onClick={() => setMobileOpen(false)} className="block py-2 text-foreground">Home</Link>
           <Link to="/videos" onClick={() => setMobileOpen(false)} className="block py-2 text-foreground">Explore</Link>
+          <Link to="/subscriptions" onClick={() => setMobileOpen(false)} className="block py-2 text-foreground">Subscriptions</Link>
           {user ? (
             <>
               <Link to="/upload" onClick={() => setMobileOpen(false)} className="block py-2 text-foreground">Upload</Link>
