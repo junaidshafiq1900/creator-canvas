@@ -23,6 +23,8 @@ import SearchPage from "./pages/Search";
 import Notifications from "./pages/Notifications";
 import AuthCallback from "./pages/AuthCallback";
 import Videos from "./pages/Videos";
+import Subscriptions from "./pages/Subscriptions";
+import History from "./pages/History";
 
 const queryClient = new QueryClient();
 
