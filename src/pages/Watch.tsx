@@ -61,8 +61,18 @@ const Watch = () => {
       setSuggested(suggestedVids ?? []);
 
       if (user) {
-        const { data: myLike } = await supabase.from('likes').select('id').eq('video_id', id).eq('user_id', user.id).maybeSingle();
+        const [{ data: myLike }, { data: mySub }] = await Promise.all([
+          supabase.from('likes').select('id').eq('video_id', id).eq('user_id', user.id).maybeSingle(),
+          supabase.from('subscriptions').select('id').eq('follower_id', user.id).eq('creator_id', vid.creator_id).maybeSingle(),
+        ]);
         setLiked(!!myLike);
+        setSubscribed(!!mySub);
+
+        // Track watch history (upsert)
+        await supabase.from('watch_history').upsert(
+          { user_id: user.id, video_id: id, watched_at: new Date().toISOString() },
+          { onConflict: 'user_id,video_id' }
+        );
       }
 
       // Increment views
