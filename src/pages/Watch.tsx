@@ -7,7 +7,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { Skeleton } from '@/components/ui/skeleton';
 import VideoCard from '@/components/video/VideoCard';
 import AdSlot from '@/components/ads/AdSlot';
-import { ThumbsUp, Share2, Eye, Calendar, MessageSquare, User, Send, Film } from 'lucide-react';
+import { ThumbsUp, Share2, Eye, Calendar, MessageSquare, User, Send, Film, UserPlus, UserCheck } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { toast } from '@/hooks/use-toast';
 import { sendNotification } from '@/hooks/useNotifications';
