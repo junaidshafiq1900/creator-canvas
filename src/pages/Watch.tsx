@@ -173,18 +173,40 @@ const Watch = () => {
               </div>
 
               <div className="flex items-center justify-between gap-4 py-3 border-y border-border mb-4">
-                <Link to={`/channel/${creator?.username || ''}`} className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-full bg-primary/20 flex items-center justify-center overflow-hidden">
-                    {creator?.avatar_url ? (
-                      <img src={creator.avatar_url} alt="" className="w-10 h-10 rounded-full object-cover" />
-                    ) : (
-                      <User className="w-5 h-5 text-primary" />
-                    )}
-                  </div>
-                  <div>
+                <div className="flex items-center gap-3">
+                  <Link to={`/channel/${creator?.username || ''}`} className="flex items-center gap-3">
+                    <div className="w-10 h-10 rounded-full bg-primary/20 flex items-center justify-center overflow-hidden">
+                      {creator?.avatar_url ? (
+                        <img src={creator.avatar_url} alt="" className="w-10 h-10 rounded-full object-cover" />
+                      ) : (
+                        <User className="w-5 h-5 text-primary" />
+                      )}
+                    </div>
                     <p className="font-semibold text-foreground text-sm">{creator?.display_name || creator?.username || 'Unknown'}</p>
-                  </div>
-                </Link>
+                  </Link>
+                  {user && video?.creator_id !== user.id && (
+                    <Button
+                      variant={subscribed ? 'secondary' : 'default'}
+                      size="sm"
+                      disabled={subLoading}
+                      onClick={async () => {
+                        if (!video?.creator_id) return;
+                        setSubLoading(true);
+                        if (subscribed) {
+                          await supabase.from('subscriptions').delete().eq('follower_id', user.id).eq('creator_id', video.creator_id);
+                          setSubscribed(false);
+                        } else {
+                          await supabase.from('subscriptions').insert({ follower_id: user.id, creator_id: video.creator_id });
+                          setSubscribed(true);
+                          sendNotification(user.id, video.creator_id, 'new_follower', user.id, 'profile', 'subscribed to your channel');
+                        }
+                        setSubLoading(false);
+                      }}
+                    >
+                      {subscribed ? <><UserCheck className="w-4 h-4 mr-1" /> Subscribed</> : <><UserPlus className="w-4 h-4 mr-1" /> Subscribe</>}
+                    </Button>
+                  )}
+                </div>
                 <div className="flex items-center gap-2">
                   <Button variant={liked ? 'default' : 'outline'} size="sm" onClick={toggleLike} disabled={!user}>
                     <ThumbsUp className="w-4 h-4 mr-1" /> {likeCount}
