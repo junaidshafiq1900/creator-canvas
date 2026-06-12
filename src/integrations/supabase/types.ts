@@ -403,6 +403,16 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      can_send_notification: {
+        Args: {
+          _actor: string
+          _recipient: string
+          _target_id: string
+          _target_type: string
+          _type: string
+        }
+        Returns: boolean
+      }
       has_role: {
         Args: {
           _role: Database["public"]["Enums"]["app_role"]
