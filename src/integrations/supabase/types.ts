@@ -283,6 +283,39 @@ export type Database = {
         }
         Relationships: []
       }
+      storage_provider_config: {
+        Row: {
+          bunny_api_key: string | null
+          bunny_cdn_hostname: string | null
+          bunny_library_id: string | null
+          default_provider: string
+          id: boolean
+          updated_at: string
+          updated_by: string | null
+          vimeo_access_token: string | null
+        }
+        Insert: {
+          bunny_api_key?: string | null
+          bunny_cdn_hostname?: string | null
+          bunny_library_id?: string | null
+          default_provider?: string
+          id?: boolean
+          updated_at?: string
+          updated_by?: string | null
+          vimeo_access_token?: string | null
+        }
+        Update: {
+          bunny_api_key?: string | null
+          bunny_cdn_hostname?: string | null
+          bunny_library_id?: string | null
+          default_provider?: string
+          id?: boolean
+          updated_at?: string
+          updated_by?: string | null
+          vimeo_access_token?: string | null
+        }
+        Relationships: []
+      }
       subscriptions: {
         Row: {
           created_at: string | null
@@ -443,6 +476,7 @@ export type Database = {
         }
         Returns: boolean
       }
+      get_default_storage_provider: { Args: never; Returns: string }
       has_role: {
         Args: {
           _role: Database["public"]["Enums"]["app_role"]
