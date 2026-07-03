@@ -108,6 +108,27 @@ export type Database = {
         }
         Relationships: []
       }
+      platform_settings: {
+        Row: {
+          key: string
+          updated_at: string
+          updated_by: string | null
+          value: Json
+        }
+        Insert: {
+          key: string
+          updated_at?: string
+          updated_by?: string | null
+          value?: Json
+        }
+        Update: {
+          key?: string
+          updated_at?: string
+          updated_by?: string | null
+          value?: Json
+        }
+        Relationships: []
+      }
       post_comments: {
         Row: {
           content: string
@@ -311,6 +332,9 @@ export type Database = {
           is_disabled: boolean
           is_featured: boolean
           is_short: boolean
+          provider_playback_url: string | null
+          provider_video_id: string | null
+          storage_provider: string
           storage_provider_ref: string | null
           storage_type: string | null
           tags: string[] | null
@@ -330,6 +354,9 @@ export type Database = {
           is_disabled?: boolean
           is_featured?: boolean
           is_short?: boolean
+          provider_playback_url?: string | null
+          provider_video_id?: string | null
+          storage_provider?: string
           storage_provider_ref?: string | null
           storage_type?: string | null
           tags?: string[] | null
@@ -349,6 +376,9 @@ export type Database = {
           is_disabled?: boolean
           is_featured?: boolean
           is_short?: boolean
+          provider_playback_url?: string | null
+          provider_video_id?: string | null
+          storage_provider?: string
           storage_provider_ref?: string | null
           storage_type?: string | null
           tags?: string[] | null
