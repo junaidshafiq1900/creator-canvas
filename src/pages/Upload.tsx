@@ -8,7 +8,7 @@ import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Switch } from '@/components/ui/switch';
-import { uploadFile, validateFile, ALLOWED_VIDEO_TYPES, ALLOWED_IMAGE_TYPES, MAX_VIDEO_SIZE, MAX_IMAGE_SIZE } from '@/lib/storage';
+import { uploadVideo, uploadThumbnail, validateFile, ALLOWED_VIDEO_TYPES, ALLOWED_IMAGE_TYPES, MAX_VIDEO_SIZE, MAX_IMAGE_SIZE } from '@/lib/storage';
 import { VIDEO_CATEGORIES } from '@/types/database';
 import { Upload as UploadIcon, Film, Image, Loader2, AlertCircle, CheckCircle, Zap } from 'lucide-react';
 
