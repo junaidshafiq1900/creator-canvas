@@ -72,10 +72,16 @@ const Upload = () => {
     setProgress(0);
 
     try {
-      const videoResult = await uploadFile(videoFile, 'videos', 'videos', p => setProgress(Math.round(p * 0.7)));
-      let thumbUrl = null;
+      const videoResult = await uploadVideo(
+        videoFile,
+        { title: title.trim(), description: description.trim() || undefined },
+        p => setProgress(Math.round(p * 0.7)),
+      );
+      let thumbUrl: string | null = null;
       if (thumbFile) {
-        const thumbResult = await uploadFile(thumbFile, 'thumbnails', 'thumbnails', p => setProgress(70 + Math.round(p * 0.2)));
+        const thumbResult = await uploadThumbnail(thumbFile, p =>
+          setProgress(70 + Math.round(p * 0.2)),
+        );
         thumbUrl = thumbResult.url;
       }
       setProgress(90);
@@ -85,9 +91,12 @@ const Upload = () => {
         title: title.trim(),
         description: description.trim() || null,
         thumbnail_url: thumbUrl,
-        video_url: videoResult.url,
+        video_url: videoResult.videoUrl,
         video_path: videoResult.path,
         storage_type: videoResult.provider,
+        storage_provider: videoResult.provider,
+        provider_video_id: videoResult.providerVideoId ?? null,
+        provider_playback_url: videoResult.providerPlaybackUrl ?? null,
         category,
         tags: tags.split(',').map(t => t.trim()).filter(Boolean),
         creator_id: user.id,
