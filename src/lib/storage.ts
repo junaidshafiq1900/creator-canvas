@@ -115,3 +115,23 @@ export const deleteFile = async (path: string, bucket: string) => {
   const { error } = await supabase.storage.from(bucket).remove([path]);
   if (error) throw error;
 };
+
+/**
+ * Generic Supabase Storage upload for images (avatars, banners, post images).
+ * Kept for backwards compatibility with pages that upload non-video assets.
+ */
+export const uploadFile = async (
+  file: File,
+  bucket: string,
+  folder: string,
+  onProgress?: (pct: number) => void,
+): Promise<{ url: string; path: string; provider: 'supabase' }> => {
+  const ext = file.name.split('.').pop();
+  const path = `${folder}/${Date.now()}-${Math.random().toString(36).slice(2)}.${ext}`;
+  onProgress?.(10);
+  const { data, error } = await supabase.storage.from(bucket).upload(path, file, { upsert: false });
+  if (error) throw error;
+  const { data: urlData } = supabase.storage.from(bucket).getPublicUrl(data.path);
+  onProgress?.(100);
+  return { url: urlData.publicUrl, path: data.path, provider: 'supabase' };
+};
