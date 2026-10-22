@@ -19,6 +19,7 @@ export type Database = {
           content: string
           created_at: string | null
           id: string
+          parent_id: string | null
           user_id: string
           video_id: string
         }
@@ -26,6 +27,7 @@ export type Database = {
           content: string
           created_at?: string | null
           id?: string
+          parent_id?: string | null
           user_id: string
           video_id: string
         }
@@ -33,10 +35,18 @@ export type Database = {
           content?: string
           created_at?: string | null
           id?: string
+          parent_id?: string | null
           user_id?: string
           video_id?: string
         }
         Relationships: [
+          {
+            foreignKeyName: "comments_parent_id_fkey"
+            columns: ["parent_id"]
+            isOneToOne: false
+            referencedRelation: "comments"
+            referencedColumns: ["id"]
+          },
           {
             foreignKeyName: "comments_user_id_profiles_fkey"
             columns: ["user_id"]
@@ -46,6 +56,35 @@ export type Database = {
           },
           {
             foreignKeyName: "comments_video_id_fkey"
+            columns: ["video_id"]
+            isOneToOne: false
+            referencedRelation: "videos"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      dislikes: {
+        Row: {
+          created_at: string
+          id: string
+          user_id: string
+          video_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          user_id: string
+          video_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          user_id?: string
+          video_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "dislikes_video_id_fkey"
             columns: ["video_id"]
             isOneToOne: false
             referencedRelation: "videos"
@@ -133,6 +172,78 @@ export type Database = {
           updated_at?: string
           updated_by?: string | null
           value?: Json
+        }
+        Relationships: []
+      }
+      playlist_items: {
+        Row: {
+          added_at: string
+          id: string
+          playlist_id: string
+          position: number
+          video_id: string
+        }
+        Insert: {
+          added_at?: string
+          id?: string
+          playlist_id: string
+          position?: number
+          video_id: string
+        }
+        Update: {
+          added_at?: string
+          id?: string
+          playlist_id?: string
+          position?: number
+          video_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "playlist_items_playlist_id_fkey"
+            columns: ["playlist_id"]
+            isOneToOne: false
+            referencedRelation: "playlists"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "playlist_items_video_id_fkey"
+            columns: ["video_id"]
+            isOneToOne: false
+            referencedRelation: "videos"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      playlists: {
+        Row: {
+          created_at: string
+          description: string | null
+          id: string
+          is_private: boolean
+          is_watch_later: boolean
+          title: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          description?: string | null
+          id?: string
+          is_private?: boolean
+          is_watch_later?: boolean
+          title: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          description?: string | null
+          id?: string
+          is_private?: boolean
+          is_watch_later?: boolean
+          title?: string
+          updated_at?: string
+          user_id?: string
         }
         Relationships: []
       }
@@ -260,6 +371,7 @@ export type Database = {
       reports: {
         Row: {
           created_at: string | null
+          details: string | null
           id: string
           reason: string
           reporter_id: string
@@ -270,6 +382,7 @@ export type Database = {
         }
         Insert: {
           created_at?: string | null
+          details?: string | null
           id?: string
           reason: string
           reporter_id: string
@@ -280,6 +393,7 @@ export type Database = {
         }
         Update: {
           created_at?: string | null
+          details?: string | null
           id?: string
           reason?: string
           reporter_id?: string
@@ -368,6 +482,7 @@ export type Database = {
           created_at: string | null
           creator_id: string
           description: string | null
+          duration: number | null
           id: string
           is_disabled: boolean
           is_featured: boolean
@@ -390,6 +505,7 @@ export type Database = {
           created_at?: string | null
           creator_id: string
           description?: string | null
+          duration?: number | null
           id?: string
           is_disabled?: boolean
           is_featured?: boolean
@@ -412,6 +528,7 @@ export type Database = {
           created_at?: string | null
           creator_id?: string
           description?: string | null
+          duration?: number | null
           id?: string
           is_disabled?: boolean
           is_featured?: boolean
