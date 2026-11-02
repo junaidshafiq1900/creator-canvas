@@ -134,7 +134,7 @@ const Upload = () => {
           <h1 className="text-xl font-bold text-foreground mb-2">{isShort ? 'Short' : 'Video'} uploaded!</h1>
           <p className="text-muted-foreground mb-4">Your {isShort ? 'short' : 'video'} is now live on Joulecorp.</p>
           <div className="flex gap-3 justify-center">
-            <Button onClick={() => { setSuccess(false); setVideoFile(null); setThumbFile(null); setTitle(''); setDescription(''); setCategory(''); setTags(''); setIsShort(false); }}>Upload another</Button>
+            <Button onClick={() => { setSuccess(false); setVideoFile(null); setThumbFile(null); setTitle(''); setDescription(''); setCategory(''); setTags(''); setIsShort(false); setVideoDuration(null); }}>Upload another</Button>
             <Button variant="outline" onClick={() => navigate('/profile')}>View Profile</Button>
           </div>
         </div>
