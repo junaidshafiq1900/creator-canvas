@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom';
 import { Eye, Clock } from 'lucide-react';
 import { motion } from 'framer-motion';
+import { formatDuration } from '@/lib/format';
 
 export interface VideoCardProps {
   id: string;
@@ -11,9 +12,10 @@ export interface VideoCardProps {
   date: string;
   category?: string;
   gradient?: string;
+  duration?: number | null;
 }
 
-const VideoCard = ({ id, title, thumbnail, creator, views, date, category, gradient }: VideoCardProps) => (
+const VideoCard = ({ id, title, thumbnail, creator, views, date, category, gradient, duration }: VideoCardProps) => (
   <motion.div
     initial={{ opacity: 0, y: 12 }}
     whileInView={{ opacity: 1, y: 0 }}
@@ -31,6 +33,11 @@ const VideoCard = ({ id, title, thumbnail, creator, views, date, category, gradi
         {category && (
           <span className="absolute top-2 left-2 px-2 py-0.5 rounded text-[10px] font-medium bg-primary/80 text-primary-foreground">
             {category}
+          </span>
+        )}
+        {duration && formatDuration(duration) && (
+          <span className="absolute bottom-2 right-2 px-1.5 py-0.5 rounded text-[10px] font-semibold bg-background/85 text-foreground backdrop-blur-sm">
+            {formatDuration(duration)}
           </span>
         )}
       </div>
