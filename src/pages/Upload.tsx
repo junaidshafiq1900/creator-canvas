@@ -23,6 +23,7 @@ const Upload = () => {
   const [category, setCategory] = useState('');
   const [tags, setTags] = useState('');
   const [videoFile, setVideoFile] = useState<File | null>(null);
+  const [videoDuration, setVideoDuration] = useState<number | null>(null);
   const [thumbFile, setThumbFile] = useState<File | null>(null);
   const [isShort, setIsShort] = useState(false);
   const [uploading, setUploading] = useState(false);
@@ -50,6 +51,16 @@ const Upload = () => {
     if (err) { setError(err); return; }
     setVideoFile(file);
     setError('');
+
+    // Read duration client-side for the duration badge
+    const url = URL.createObjectURL(file);
+    const probe = document.createElement('video');
+    probe.preload = 'metadata';
+    probe.onloadedmetadata = () => {
+      if (Number.isFinite(probe.duration)) setVideoDuration(Math.round(probe.duration));
+      URL.revokeObjectURL(url);
+    };
+    probe.src = url;
   };
 
   const handleThumbSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -102,6 +113,7 @@ const Upload = () => {
         creator_id: user.id,
         views: 0,
         is_short: isShort,
+        duration: videoDuration ?? null,
       });
 
       if (dbError) throw dbError;
