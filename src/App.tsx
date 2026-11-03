@@ -25,6 +25,10 @@ import AuthCallback from "./pages/AuthCallback";
 import Videos from "./pages/Videos";
 import Subscriptions from "./pages/Subscriptions";
 import History from "./pages/History";
+import Playlist from "./pages/Playlist";
+import Terms from "./pages/Terms";
+import Privacy from "./pages/Privacy";
+import Dmca from "./pages/Dmca";
 
 const queryClient = new QueryClient();
 
@@ -53,6 +57,10 @@ const App = () => (
             <Route path="/videos" element={<Videos />} />
             <Route path="/subscriptions" element={<Subscriptions />} />
             <Route path="/history" element={<History />} />
+            <Route path="/playlist/:id" element={<Playlist />} />
+            <Route path="/terms" element={<Terms />} />
+            <Route path="/privacy" element={<Privacy />} />
+            <Route path="/dmca" element={<Dmca />} />
             <Route path="/search" element={<SearchPage />} />
             <Route path="/notifications" element={<Notifications />} />
             <Route path="*" element={<NotFound />} />

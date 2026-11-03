@@ -1,6 +1,6 @@
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
-import { Search, Upload, Menu, X, Settings, LogOut, User, LayoutDashboard, Sun, Moon, Bell, Compass, Users, History } from 'lucide-react';
+import { Search, Upload, Menu, X, Settings, LogOut, User, LayoutDashboard, Sun, Moon, Bell, Compass, Users, History, ListVideo } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useState } from 'react';
 import { useTheme } from 'next-themes';
@@ -65,6 +65,9 @@ const Navbar = () => {
               </Button>
               <Button variant="ghost" size="sm" onClick={() => navigate('/subscriptions')} className="text-muted-foreground hover:text-foreground">
                 <Users className="w-4 h-4 mr-1.5" /> Subscriptions
+              </Button>
+              <Button variant="ghost" size="sm" onClick={() => navigate('/playlists')} className="text-muted-foreground hover:text-foreground">
+                <ListVideo className="w-4 h-4 mr-1.5" /> Playlists
               </Button>
               <Button variant="ghost" size="icon" onClick={() => navigate('/upload')} className="text-muted-foreground hover:text-primary">
                 <Upload className="w-5 h-5" />
