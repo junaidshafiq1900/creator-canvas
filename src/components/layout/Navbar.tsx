@@ -1,6 +1,6 @@
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
-import { Search, Upload, Menu, X, Settings, LogOut, User, LayoutDashboard, Sun, Moon, Bell, Compass, Users, History } from 'lucide-react';
+import { Search, Upload, Menu, X, Settings, LogOut, User, LayoutDashboard, Sun, Moon, Bell, Compass, Users, History, ListVideo } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useState } from 'react';
 import { useTheme } from 'next-themes';
@@ -66,6 +66,9 @@ const Navbar = () => {
               <Button variant="ghost" size="sm" onClick={() => navigate('/subscriptions')} className="text-muted-foreground hover:text-foreground">
                 <Users className="w-4 h-4 mr-1.5" /> Subscriptions
               </Button>
+              <Button variant="ghost" size="sm" onClick={() => navigate('/playlists')} className="text-muted-foreground hover:text-foreground">
+                <ListVideo className="w-4 h-4 mr-1.5" /> Playlists
+              </Button>
               <Button variant="ghost" size="icon" onClick={() => navigate('/upload')} className="text-muted-foreground hover:text-primary">
                 <Upload className="w-5 h-5" />
               </Button>
@@ -86,6 +89,9 @@ const Navbar = () => {
                 <DropdownMenuContent align="end" className="w-48">
                   <DropdownMenuItem onClick={() => navigate('/history')}>
                     <History className="w-4 h-4 mr-2" /> History
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => navigate('/playlists')}>
+                    <ListVideo className="w-4 h-4 mr-2" /> Playlists
                   </DropdownMenuItem>
                   <DropdownMenuItem onClick={() => navigate('/profile')}>
                     <User className="w-4 h-4 mr-2" /> Profile
@@ -129,7 +135,9 @@ const Navbar = () => {
           </form>
           <Link to="/" onClick={() => setMobileOpen(false)} className="block py-2 text-foreground">Home</Link>
           <Link to="/videos" onClick={() => setMobileOpen(false)} className="block py-2 text-foreground">Explore</Link>
-          <Link to="/subscriptions" onClick={() => setMobileOpen(false)} className="block py-2 text-foreground">Subscriptions</Link>
+              <Link to="/subscriptions" onClick={() => setMobileOpen(false)} className="block py-2 text-foreground">Subscriptions</Link>
+              <Link to="/playlists" onClick={() => setMobileOpen(false)} className="block py-2 text-foreground">Playlists</Link>
+              <Link to="/history" onClick={() => setMobileOpen(false)} className="block py-2 text-foreground">History</Link>
           {user ? (
             <>
               <Link to="/upload" onClick={() => setMobileOpen(false)} className="block py-2 text-foreground">Upload</Link>
