@@ -90,6 +90,9 @@ const Navbar = () => {
                   <DropdownMenuItem onClick={() => navigate('/history')}>
                     <History className="w-4 h-4 mr-2" /> History
                   </DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => navigate('/playlists')}>
+                    <ListVideo className="w-4 h-4 mr-2" /> Playlists
+                  </DropdownMenuItem>
                   <DropdownMenuItem onClick={() => navigate('/profile')}>
                     <User className="w-4 h-4 mr-2" /> Profile
                   </DropdownMenuItem>
@@ -132,7 +135,9 @@ const Navbar = () => {
           </form>
           <Link to="/" onClick={() => setMobileOpen(false)} className="block py-2 text-foreground">Home</Link>
           <Link to="/videos" onClick={() => setMobileOpen(false)} className="block py-2 text-foreground">Explore</Link>
-          <Link to="/subscriptions" onClick={() => setMobileOpen(false)} className="block py-2 text-foreground">Subscriptions</Link>
+              <Link to="/subscriptions" onClick={() => setMobileOpen(false)} className="block py-2 text-foreground">Subscriptions</Link>
+              <Link to="/playlists" onClick={() => setMobileOpen(false)} className="block py-2 text-foreground">Playlists</Link>
+              <Link to="/history" onClick={() => setMobileOpen(false)} className="block py-2 text-foreground">History</Link>
           {user ? (
             <>
               <Link to="/upload" onClick={() => setMobileOpen(false)} className="block py-2 text-foreground">Upload</Link>
