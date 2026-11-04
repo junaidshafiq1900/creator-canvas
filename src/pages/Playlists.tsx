@@ -58,8 +58,6 @@ const Playlists = () => {
     );
   };
 
-  const i_am_primary = (_p: any) => false;
-
   if (loading) {
     return (
       <div className="min-h-screen pt-20 pb-16">
