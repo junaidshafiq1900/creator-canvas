@@ -8,7 +8,7 @@ import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
 import { Skeleton } from '@/components/ui/skeleton';
 import VideoCard from '@/components/video/VideoCard';
 import AdSlot from '@/components/ads/AdSlot';
-import { User, Users, Calendar, Video, UserPlus, UserCheck, FileText, Home, MessageSquare, Heart, Send, Image as ImageIcon, Zap, Play } from 'lucide-react';
+import { User, Users, Calendar, Video, UserPlus, UserCheck, FileText, Home, MessageSquare, Heart, Send, Image as ImageIcon, Zap, Play, Eye, TrendingUp } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { toast } from '@/hooks/use-toast';
 import { uploadFile, validateFile, ALLOWED_IMAGE_TYPES, MAX_IMAGE_SIZE } from '@/lib/storage';
@@ -29,6 +29,7 @@ const Channel = () => {
   const [shorts, setShorts] = useState<any[]>([]);
   const [posts, setPosts] = useState<any[]>([]);
   const [followerCount, setFollowerCount] = useState(0);
+  const [stats, setStats] = useState<{ totalViews: number; totalLikes: number; top: any } | null>(null);
   const [following, setFollowing] = useState(false);
   const [followLoading, setFollowLoading] = useState(false);
 
@@ -61,6 +62,16 @@ const Channel = () => {
     setShorts(allVideos.filter((v: any) => v.is_short));
     setPosts(postsData ?? []);
     setFollowerCount(followers ?? 0);
+
+    // Creator analytics snapshot
+    const totalViews = allVideos.reduce((a: number, v: any) => a + (v.views || 0), 0);
+    let totalLikes = 0;
+    if (allVideos.length > 0) {
+      const { count: likesCount } = await db.from('likes').select('*', { count: 'exact', head: true }).in('video_id', allVideos.map((v: any) => v.id));
+      totalLikes = likesCount ?? 0;
+    }
+    const top = [...allVideos].sort((a: any, b: any) => (b.views || 0) - (a.views || 0))[0] || null;
+    setStats({ totalViews, totalLikes, top });
 
     if (user) {
       const { data: sub } = await supabase.from('subscriptions').select('id').eq('creator_id', prof.id).eq('follower_id', user.id).maybeSingle();
@@ -184,6 +195,34 @@ const Channel = () => {
           </div>
         </motion.div>
 
+        {isOwner && stats && (videos.length + shorts.length) > 0 && (
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+            <div className="rounded-xl border border-border bg-card p-4">
+              <p className="text-xs text-muted-foreground flex items-center gap-1.5 mb-1"><Eye className="w-3.5 h-3.5 text-primary" /> Total views</p>
+              <p className="text-xl font-bold text-foreground">{formatFollowers(stats.totalViews)}</p>
+            </div>
+            <div className="rounded-xl border border-border bg-card p-4">
+              <p className="text-xs text-muted-foreground flex items-center gap-1.5 mb-1"><Heart className="w-3.5 h-3.5 text-primary" /> Total likes</p>
+              <p className="text-xl font-bold text-foreground">{formatFollowers(stats.totalLikes)}</p>
+            </div>
+            <div className="rounded-xl border border-border bg-card p-4">
+              <p className="text-xs text-muted-foreground flex items-center gap-1.5 mb-1"><Users className="w-3.5 h-3.5 text-primary" /> Followers</p>
+              <p className="text-xl font-bold text-foreground">{formatFollowers(followerCount)}</p>
+            </div>
+            <div className="rounded-xl border border-border bg-card p-4 min-w-0">
+              <p className="text-xs text-muted-foreground flex items-center gap-1.5 mb-1"><TrendingUp className="w-3.5 h-3.5 text-primary" /> Top video</p>
+              {stats.top ? (
+                <>
+                  <Link to={`/watch/${stats.top.id}`} className="text-sm font-semibold text-foreground truncate block hover:text-primary transition-colors">{stats.top.title}</Link>
+                  <p className="text-xs text-muted-foreground">{formatFollowers(stats.top.views || 0)} views</p>
+                </>
+              ) : (
+                <p className="text-sm text-muted-foreground">—</p>
+              )}
+            </div>
+          </div>
+        )}
+
         <AdSlot slot="channel-top" format="horizontal" className="mb-8" />
 
         <Tabs defaultValue="home" className="mb-16">
@@ -203,7 +242,7 @@ const Channel = () => {
                   <h3 className="text-lg font-semibold text-foreground mb-4 flex items-center gap-2"><Play className="w-5 h-5 text-primary" /> Recent Videos</h3>
                   <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
                     {videos.slice(0, 6).map(v => (
-                      <VideoCard key={v.id} id={v.id} title={v.title} thumbnail={v.thumbnail_url} creator={profile.display_name || profile.username} views={formatFollowers(v.views || 0)} date={new Date(v.created_at).toLocaleDateString()} category={v.category} />
+                      <VideoCard key={v.id} id={v.id} title={v.title} thumbnail={v.thumbnail_url} creator={profile.display_name || profile.username} views={formatFollowers(v.views || 0)} date={new Date(v.created_at).toLocaleDateString()} duration={v.duration} />
                     ))}
                   </div>
                 </div>
@@ -268,7 +307,7 @@ const Channel = () => {
             {videos.length > 0 ? (
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
                 {videos.map(v => (
-                  <VideoCard key={v.id} id={v.id} title={v.title} thumbnail={v.thumbnail_url} creator={profile.display_name || profile.username} views={formatFollowers(v.views || 0)} date={new Date(v.created_at).toLocaleDateString()} category={v.category} />
+                  <VideoCard key={v.id} id={v.id} title={v.title} thumbnail={v.thumbnail_url} creator={profile.display_name || profile.username} views={formatFollowers(v.views || 0)} date={new Date(v.created_at).toLocaleDateString()} duration={v.duration} />
                 ))}
               </div>
             ) : (

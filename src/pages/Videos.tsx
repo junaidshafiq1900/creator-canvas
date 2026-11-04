@@ -119,6 +119,7 @@ const Videos = () => {
                     views={formatCount(v.views || 0)}
                     date={new Date(v.created_at).toLocaleDateString()}
                     category={v.category}
+                    duration={v.duration}
                   />
                 );
               })}
