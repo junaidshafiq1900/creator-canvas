@@ -9,7 +9,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
 import VideoCard from '@/components/video/VideoCard';
-import { User, Calendar, Users, Settings, Video, Home, FileText, Zap, Send, Image as ImageIcon, MessageSquare, Play, Pencil, Trash2, X as XIcon, Check } from 'lucide-react';
+import { User, Calendar, Users, Settings, Video, Home, FileText, Zap, Send, Image as ImageIcon, MessageSquare, Play, Pencil, Trash2, X as XIcon, Check, Eye, Heart, TrendingUp } from 'lucide-react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '@/components/ui/dialog';
 import { motion } from 'framer-motion';
 import { toast } from '@/hooks/use-toast';
@@ -29,6 +29,7 @@ const Profile = () => {
   const [shorts, setShorts] = useState<any[]>([]);
   const [posts, setPosts] = useState<any[]>([]);
   const [followerCount, setFollowerCount] = useState(0);
+  const [stats, setStats] = useState<{ totalViews: number; totalLikes: number; top: any } | null>(null);
   const [loading, setLoading] = useState(true);
   const [editing, setEditing] = useState(false);
   const [displayName, setDisplayName] = useState('');
@@ -64,6 +65,16 @@ const Profile = () => {
     setShorts(allVideos.filter((v: any) => v.is_short));
     setPosts(postsData ?? []);
     setFollowerCount(followers ?? 0);
+
+    // Creator analytics snapshot
+    const totalViews = allVideos.reduce((a: number, v: any) => a + (v.views || 0), 0);
+    let totalLikes = 0;
+    if (allVideos.length > 0) {
+      const { count: likesCount } = await db.from('likes').select('*', { count: 'exact', head: true }).in('video_id', allVideos.map((v: any) => v.id));
+      totalLikes = likesCount ?? 0;
+    }
+    const top = [...allVideos].sort((a: any, b: any) => (b.views || 0) - (a.views || 0))[0] || null;
+    setStats({ totalViews, totalLikes, top });
     if (prof) {
       setDisplayName(prof.display_name || '');
       setUsername(prof.username || '');
@@ -228,6 +239,34 @@ const Profile = () => {
           </motion.div>
         )}
 
+        {stats && (videos.length + shorts.length) > 0 && (
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-10">
+            <div className="rounded-xl border border-border bg-card p-4">
+              <p className="text-xs text-muted-foreground flex items-center gap-1.5 mb-1"><Eye className="w-3.5 h-3.5 text-primary" /> Total views</p>
+              <p className="text-xl font-bold text-foreground">{formatCount(stats.totalViews)}</p>
+            </div>
+            <div className="rounded-xl border border-border bg-card p-4">
+              <p className="text-xs text-muted-foreground flex items-center gap-1.5 mb-1"><Heart className="w-3.5 h-3.5 text-primary" /> Total likes</p>
+              <p className="text-xl font-bold text-foreground">{formatCount(stats.totalLikes)}</p>
+            </div>
+            <div className="rounded-xl border border-border bg-card p-4">
+              <p className="text-xs text-muted-foreground flex items-center gap-1.5 mb-1"><Users className="w-3.5 h-3.5 text-primary" /> Followers</p>
+              <p className="text-xl font-bold text-foreground">{formatCount(followerCount)}</p>
+            </div>
+            <div className="rounded-xl border border-border bg-card p-4 min-w-0">
+              <p className="text-xs text-muted-foreground flex items-center gap-1.5 mb-1"><TrendingUp className="w-3.5 h-3.5 text-primary" /> Top video</p>
+              {stats.top ? (
+                <>
+                  <Link to={`/watch/${stats.top.id}`} className="text-sm font-semibold text-foreground truncate block hover:text-primary transition-colors">{stats.top.title}</Link>
+                  <p className="text-xs text-muted-foreground">{formatCount(stats.top.views || 0)} views</p>
+                </>
+              ) : (
+                <p className="text-sm text-muted-foreground">—</p>
+              )}
+            </div>
+          </div>
+        )}
+
         <Tabs defaultValue="home" className="mb-16">
           <TabsList className="bg-secondary/50 mb-6">
             <TabsTrigger value="home" className="gap-1.5"><Home className="w-4 h-4" /> Home</TabsTrigger>
@@ -244,7 +283,7 @@ const Profile = () => {
                   <h3 className="text-lg font-semibold text-foreground mb-4 flex items-center gap-2"><Play className="w-5 h-5 text-primary" /> Recent Videos</h3>
                   <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
                     {videos.slice(0, 6).map(v => (
-                      <VideoCard key={v.id} id={v.id} title={v.title} thumbnail={v.thumbnail_url} creator={creatorName} views={formatCount(v.views || 0)} date={new Date(v.created_at).toLocaleDateString()} category={v.category} />
+                      <VideoCard key={v.id} id={v.id} title={v.title} thumbnail={v.thumbnail_url} creator={creatorName} views={formatCount(v.views || 0)} date={new Date(v.created_at).toLocaleDateString()} category={v.category} duration={v.duration} />
                     ))}
                   </div>
                 </div>
@@ -311,7 +350,7 @@ const Profile = () => {
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
                 {videos.map(v => (
                   <div key={v.id} className="relative group">
-                    <VideoCard id={v.id} title={v.title} thumbnail={v.thumbnail_url} creator={creatorName} views={formatCount(v.views || 0)} date={new Date(v.created_at).toLocaleDateString()} category={v.category} />
+                    <VideoCard id={v.id} title={v.title} thumbnail={v.thumbnail_url} creator={creatorName} views={formatCount(v.views || 0)} date={new Date(v.created_at).toLocaleDateString()} category={v.category} duration={v.duration} />
                     <div className="absolute top-2 right-2 flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
                       <Button size="icon" variant="secondary" className="h-7 w-7" onClick={(e) => { e.preventDefault(); setEditingVideo(v); setEditTitle(v.title); setEditDesc(v.description || ''); }}>
                         <Pencil className="w-3 h-3" />
