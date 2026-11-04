@@ -112,6 +112,7 @@ const History = () => {
                     views={formatCount(v.views || 0)}
                     date={new Date(h.watched_at).toLocaleDateString()}
                     category={v.category}
+                    duration={v.duration}
                   />
                 );
               })}
