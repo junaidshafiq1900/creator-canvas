@@ -28,7 +28,7 @@ const Playlists = () => {
         .order('updated_at', { ascending: false })
         .limit(24);
 
-      setMine((minePls ?? []).filter((p: any) => p.is_watch_later || p.playlist_items?.length > 0 || true));
+      setMine(minePls ?? []);
       setPublicOnes(publicPls ?? []);
       setLoading(false);
     })();
@@ -38,8 +38,8 @@ const Playlists = () => {
     const itemCount = p.playlist_items?.[0]?.count ?? 0;
     return (
       <Link to={`/playlist/${p.id}`} className="group block rounded-xl border border-border bg-card overflow-hidden hover:border-primary/40 transition-colors">
-        <div className="h-24 bg-secondary flex items-center justify-center relative">
-          <ListVideo className={`w-8 h-8 transition-colors ${i_am_primary(p) ? 'text-primary' : 'text-muted-foreground'}`} />
+          <div className="h-24 bg-secondary flex items-center justify-center relative">
+          <ListVideo className="w-8 h-8 text-muted-foreground" />
           <span className="absolute bottom-2 right-2 px-1.5 py-0.5 rounded text-[10px] font-semibold bg-background/85 text-foreground">
             {itemCount} {itemCount === 1 ? 'video' : 'videos'}
           </span>
@@ -82,8 +82,8 @@ const Playlists = () => {
             <h1 className="text-2xl font-bold text-foreground">Playlists</h1>
           </div>
           {user && (
-            <Button size="sm" variant="outline" onClick={() => navigate('/watch/new')}>
-              <Plus className="w-4 h-4 mr-1" /> New playlist
+            <Button size="sm" variant="outline" onClick={() => navigate('/videos')}>
+              <Plus className="w-4 h-4 mr-1" /> Save videos to a playlist
             </Button>
           )}
         </div>
