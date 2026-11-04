@@ -17,7 +17,8 @@ const Footer = () => (
           <h4 className="font-semibold text-foreground mb-3 text-sm">Platform</h4>
           <div className="space-y-2 text-sm text-muted-foreground">
             <Link to="/" className="block hover:text-foreground transition-colors">Home</Link>
-            <Link to="/feed" className="block hover:text-foreground transition-colors">Feed</Link>
+            <Link to="/videos" className="block hover:text-foreground transition-colors">Explore</Link>
+            <Link to="/playlists" className="block hover:text-foreground transition-colors">Playlists</Link>
             <Link to="/upload" className="block hover:text-foreground transition-colors">Upload</Link>
           </div>
         </div>
@@ -32,9 +33,9 @@ const Footer = () => (
         <div>
           <h4 className="font-semibold text-foreground mb-3 text-sm">Legal</h4>
           <div className="space-y-2 text-sm text-muted-foreground">
-            <span className="block">Terms of Service</span>
-            <span className="block">Privacy Policy</span>
-            <span className="block">DMCA</span>
+            <Link to="/terms" className="block hover:text-foreground transition-colors">Terms of Service</Link>
+            <Link to="/privacy" className="block hover:text-foreground transition-colors">Privacy Policy</Link>
+            <Link to="/dmca" className="block hover:text-foreground transition-colors">DMCA</Link>
           </div>
         </div>
       </div>

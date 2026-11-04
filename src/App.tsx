@@ -26,6 +26,7 @@ import Videos from "./pages/Videos";
 import Subscriptions from "./pages/Subscriptions";
 import History from "./pages/History";
 import Playlist from "./pages/Playlist";
+import Playlists from "./pages/Playlists";
 import Terms from "./pages/Terms";
 import Privacy from "./pages/Privacy";
 import Dmca from "./pages/Dmca";
@@ -58,6 +59,7 @@ const App = () => (
             <Route path="/subscriptions" element={<Subscriptions />} />
             <Route path="/history" element={<History />} />
             <Route path="/playlist/:id" element={<Playlist />} />
+            <Route path="/playlists" element={<Playlists />} />
             <Route path="/terms" element={<Terms />} />
             <Route path="/privacy" element={<Privacy />} />
             <Route path="/dmca" element={<Dmca />} />
