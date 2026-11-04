@@ -4,7 +4,7 @@ const db = supabase as any;
 import { useAuth } from '@/contexts/AuthContext';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Button } from '@/components/ui/button';
-import { Flag, CheckCircle, ChevronLeft, ChevronRight } from 'lucide-react';
+import { Flag, CheckCircle, ChevronLeft, ChevronRight, EyeOff, X } from 'lucide-react';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { toast } from '@/hooks/use-toast';
 
@@ -45,6 +45,27 @@ const AdminReports = () => {
       toast({ title: 'Report resolved' });
       fetchReports();
     }
+  };
+
+  const dismissReport = async (id: string) => {
+    const { error } = await db.from('reports').update({ status: 'triaged', resolved_by: user?.id }).eq('id', id);
+    if (error) {
+      toast({ title: 'Error', description: error.message, variant: 'destructive' });
+    } else {
+      toast({ title: 'Report dismissed' });
+      fetchReports();
+    }
+  };
+
+  const hideFlaggedVideo = async (report: any) => {
+    const { error } = await db.from('videos').update({ is_disabled: true }).eq('id', report.target_id);
+    if (error) {
+      toast({ title: 'Error', description: error.message, variant: 'destructive' });
+      return;
+    }
+    await db.from('reports').update({ status: 'resolved', resolved_by: user?.id }).eq('id', report.id);
+    toast({ title: 'Video hidden and report resolved' });
+    fetchReports();
   };
 
   const totalPages = Math.ceil(total / PAGE_SIZE);
@@ -89,7 +110,10 @@ const AdminReports = () => {
               {reports.map(r => (
                 <tr key={r.id} className="border-b border-border last:border-0 hover:bg-muted/30 transition-colors">
                   <td className="px-4 py-3 text-foreground capitalize">{r.target_type}</td>
-                  <td className="px-4 py-3 text-muted-foreground max-w-[250px] truncate">{r.reason}</td>
+                  <td className="px-4 py-3 text-muted-foreground max-w-[250px]">
+                    <span className="block truncate">{r.reason}</span>
+                    {r.details && <span className="block text-xs text-muted-foreground/70 truncate">{r.details}</span>}
+                  </td>
                   <td className="px-4 py-3">
                     <span className={`px-2 py-0.5 rounded text-[10px] font-medium ${
                       r.status === 'open' ? 'bg-accent/20 text-accent' :
@@ -99,11 +123,23 @@ const AdminReports = () => {
                   </td>
                   <td className="px-4 py-3 text-muted-foreground">{new Date(r.created_at).toLocaleDateString()}</td>
                   <td className="px-4 py-3 text-right">
-                    {r.status !== 'resolved' && (
-                      <Button variant="ghost" size="sm" onClick={() => resolveReport(r.id)} className="text-primary">
-                        <CheckCircle className="w-4 h-4 mr-1" /> Resolve
-                      </Button>
-                    )}
+                    <div className="flex items-center justify-end gap-1">
+                      {r.target_type === 'video' && r.status !== 'resolved' && (
+                        <Button variant="ghost" size="sm" onClick={() => hideFlaggedVideo(r)} className="text-destructive">
+                          <EyeOff className="w-4 h-4 mr-1" /> Hide
+                        </Button>
+                      )}
+                      {r.status !== 'resolved' && (
+                        <Button variant="ghost" size="sm" onClick={() => dismissReport(r.id)} className="text-muted-foreground">
+                          <X className="w-4 h-4 mr-1" /> Dismiss
+                        </Button>
+                      )}
+                      {r.status !== 'resolved' && (
+                        <Button variant="ghost" size="sm" onClick={() => resolveReport(r.id)} className="text-primary">
+                          <CheckCircle className="w-4 h-4 mr-1" /> Resolve
+                        </Button>
+                      )}
+                    </div>
                   </td>
                 </tr>
               ))}
