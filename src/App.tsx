@@ -30,8 +30,54 @@ import Playlists from "./pages/Playlists";
 import Terms from "./pages/Terms";
 import Privacy from "./pages/Privacy";
 import Dmca from "./pages/Dmca";
+import { SiteSkinProvider, useSiteSkin } from "@/contexts/SiteSkinContext";
+import SiteSidebar from "@/components/layout/SiteSidebar";
+import { cn } from "@/lib/utils";
 
 const queryClient = new QueryClient();
+
+const AppFrame = () => {
+  const { skin, sidebarExpanded } = useSiteSkin();
+
+  return (
+    <>
+      <Navbar />
+      <SiteSidebar />
+      <div className={cn(
+        'min-h-screen',
+        skin === 'youtube' && (sidebarExpanded ? 'md:ml-52' : 'md:ml-16'),
+      )}>
+        <Routes>
+          <Route path="/" element={<Index />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/signup" element={<Signup />} />
+          <Route path="/auth/callback" element={<AuthCallback />} />
+          <Route path="/reset-password" element={<ResetPassword />} />
+          <Route path="/upload" element={<Upload />} />
+          <Route path="/watch/:id" element={<Watch />} />
+          <Route path="/profile" element={<Profile />} />
+          <Route path="/admin" element={<Admin />} />
+          <Route path="/settings" element={<Settings />} />
+          <Route path="/feed" element={<Navigate to="/videos" replace />} />
+          <Route path="/channel/:username" element={<Channel />} />
+          <Route path="/post/:id" element={<PostDetail />} />
+          <Route path="/videos" element={<Videos />} />
+          <Route path="/subscriptions" element={<Subscriptions />} />
+          <Route path="/history" element={<History />} />
+          <Route path="/playlist/:id" element={<Playlist />} />
+          <Route path="/playlists" element={<Playlists />} />
+          <Route path="/terms" element={<Terms />} />
+          <Route path="/privacy" element={<Privacy />} />
+          <Route path="/dmca" element={<Dmca />} />
+          <Route path="/search" element={<SearchPage />} />
+          <Route path="/notifications" element={<Notifications />} />
+          <Route path="*" element={<NotFound />} />
+        </Routes>
+        <Footer />
+      </div>
+    </>
+  );
+};
 
 const App = () => (
   <QueryClientProvider client={queryClient}>
@@ -39,36 +85,11 @@ const App = () => (
       <Toaster />
       <Sonner />
       <BrowserRouter>
-        <AuthProvider>
-          <Navbar />
-          <Routes>
-            <Route path="/" element={<Index />} />
-            <Route path="/login" element={<Login />} />
-            <Route path="/signup" element={<Signup />} />
-            <Route path="/auth/callback" element={<AuthCallback />} />
-            <Route path="/reset-password" element={<ResetPassword />} />
-            <Route path="/upload" element={<Upload />} />
-            <Route path="/watch/:id" element={<Watch />} />
-            <Route path="/profile" element={<Profile />} />
-            <Route path="/admin" element={<Admin />} />
-            <Route path="/settings" element={<Settings />} />
-            <Route path="/feed" element={<Navigate to="/videos" replace />} />
-            <Route path="/channel/:username" element={<Channel />} />
-            <Route path="/post/:id" element={<PostDetail />} />
-            <Route path="/videos" element={<Videos />} />
-            <Route path="/subscriptions" element={<Subscriptions />} />
-            <Route path="/history" element={<History />} />
-            <Route path="/playlist/:id" element={<Playlist />} />
-            <Route path="/playlists" element={<Playlists />} />
-            <Route path="/terms" element={<Terms />} />
-            <Route path="/privacy" element={<Privacy />} />
-            <Route path="/dmca" element={<Dmca />} />
-            <Route path="/search" element={<SearchPage />} />
-            <Route path="/notifications" element={<Notifications />} />
-            <Route path="*" element={<NotFound />} />
-          </Routes>
-          <Footer />
-        </AuthProvider>
+        <SiteSkinProvider>
+          <AuthProvider>
+            <AppFrame />
+          </AuthProvider>
+        </SiteSkinProvider>
       </BrowserRouter>
     </TooltipProvider>
   </QueryClientProvider>

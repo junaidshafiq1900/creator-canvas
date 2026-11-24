@@ -6,12 +6,15 @@ import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { saveSupabaseConfig, getSupabaseConfig, clearSupabaseConfig } from '@/lib/supabase';
 import { supabase } from '@/integrations/supabase/client';
-import { CheckCircle, Database, HardDrive, User } from 'lucide-react';
+import { CheckCircle, Database, HardDrive, User, PanelsTopLeft, Clapperboard } from 'lucide-react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { toast } from '@/hooks/use-toast';
+import { useSiteSkin } from '@/contexts/SiteSkinContext';
+import type { SiteSkin } from '@/lib/site-skin';
 
 const AdminSettings = () => {
   const { user } = useAuth();
+  const { skin, saving: skinSaving, saveSkin } = useSiteSkin();
 
   // Supabase config
   const [sbUrl, setSbUrl] = useState('');
@@ -63,6 +66,16 @@ const AdminSettings = () => {
     }
   };
 
+  const handleSkinChange = async (nextSkin: SiteSkin) => {
+    if (!user) return;
+    const saved = await saveSkin(nextSkin, user.id);
+    if (!saved) {
+      toast({ title: 'Could not update the site appearance', description: 'Please check your admin access and try again.', variant: 'destructive' });
+      return;
+    }
+    toast({ title: 'Site appearance updated', description: 'The new layout is now active for everyone.' });
+  };
+
   return (
     <div>
       <h1 className="text-2xl font-bold text-foreground mb-6">Settings</h1>
@@ -71,6 +84,7 @@ const AdminSettings = () => {
         <TabsList className="mb-6 w-full justify-start">
           <TabsTrigger value="supabase"><Database className="w-4 h-4 mr-1.5" /> Supabase</TabsTrigger>
           <TabsTrigger value="storage"><HardDrive className="w-4 h-4 mr-1.5" /> Storage</TabsTrigger>
+          <TabsTrigger value="appearance"><PanelsTopLeft className="w-4 h-4 mr-1.5" /> Appearance</TabsTrigger>
           {user && <TabsTrigger value="profile"><User className="w-4 h-4 mr-1.5" /> Profile</TabsTrigger>}
         </TabsList>
 
@@ -92,6 +106,29 @@ const AdminSettings = () => {
                   {sbSaved ? <><CheckCircle className="w-4 h-4 mr-1" /> Saved!</> : 'Save Connection'}
                 </Button>
                 {getSupabaseConfig() && <Button variant="outline" onClick={handleClearSupabase}>Disconnect</Button>}
+              </div>
+            </div>
+          </div>
+        </TabsContent>
+
+        <TabsContent value="appearance" className="space-y-4">
+          <div className="bg-card rounded-lg border border-border p-6">
+            <h2 className="font-semibold text-foreground mb-1">Site appearance</h2>
+            <p className="text-sm text-muted-foreground mb-6">Choose the layout visitors will see. Both options keep Joulecorp’s colors.</p>
+            <div className="grid gap-4 sm:grid-cols-2">
+              <div className="space-y-3 rounded-md border border-border p-4">
+                <div className="flex items-center gap-2 font-medium text-foreground"><PanelsTopLeft className="h-4 w-4 text-primary" /> Joulecorp</div>
+                <p className="min-h-10 text-sm text-muted-foreground">The current cinematic homepage, with its featured introduction and content sections.</p>
+                <Button variant={skin === 'joulecorp' ? 'default' : 'outline'} className="w-full" disabled={skinSaving} onClick={() => handleSkinChange('joulecorp')}>
+                  {skin === 'joulecorp' ? 'Currently active' : 'Use Joulecorp layout'}
+                </Button>
+              </div>
+              <div className="space-y-3 rounded-md border border-border p-4">
+                <div className="flex items-center gap-2 font-medium text-foreground"><Clapperboard className="h-4 w-4 text-primary" /> YouTube-inspired</div>
+                <p className="min-h-10 text-sm text-muted-foreground">A compact video feed, category row, and collapsible navigation rail, using Joulecorp’s colors.</p>
+                <Button variant={skin === 'youtube' ? 'default' : 'outline'} className="w-full" disabled={skinSaving} onClick={() => handleSkinChange('youtube')}>
+                  {skin === 'youtube' ? 'Currently active' : 'Use YouTube-inspired layout'}
+                </Button>
               </div>
             </div>
           </div>

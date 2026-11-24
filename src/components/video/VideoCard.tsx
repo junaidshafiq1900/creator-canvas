@@ -2,12 +2,14 @@ import { Link } from 'react-router-dom';
 import { Eye, Clock } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { formatDuration } from '@/lib/format';
+import { useSiteSkin } from '@/contexts/SiteSkinContext';
 
 export interface VideoCardProps {
   id: string;
   title: string;
   thumbnail?: string | null;
   creator: string;
+  creatorAvatar?: string | null;
   views: string;
   date: string;
   category?: string;
@@ -15,42 +17,60 @@ export interface VideoCardProps {
   duration?: number | null;
 }
 
-const VideoCard = ({ id, title, thumbnail, creator, views, date, category, gradient, duration }: VideoCardProps) => (
-  <motion.div
-    initial={{ opacity: 0, y: 12 }}
-    whileInView={{ opacity: 1, y: 0 }}
-    viewport={{ once: true }}
-    transition={{ duration: 0.4 }}
-  >
-    <Link to={`/watch/${id}`} className="group block">
-      <div className="relative aspect-video rounded-lg overflow-hidden bg-secondary mb-3">
-        {thumbnail ? (
-          <img src={thumbnail} alt={title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+const VideoCard = ({ id, title, thumbnail, creator, creatorAvatar, views, date, category, gradient, duration }: VideoCardProps) => {
+  const { skin } = useSiteSkin();
+  const isYouTubeSkin = skin === 'youtube';
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 12 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true }}
+      transition={{ duration: 0.4 }}
+    >
+      <Link to={`/watch/${id}`} className="group block">
+        <div className={`relative aspect-video overflow-hidden bg-secondary mb-3 ${isYouTubeSkin ? 'rounded-xl' : 'rounded-lg'}`}>
+          {thumbnail ? (
+            <img src={thumbnail} alt={title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+          ) : (
+            <div className="w-full h-full" style={{ background: gradient || 'linear-gradient(135deg, hsl(187 85% 53% / 0.3), hsl(225 25% 15%))' }} />
+          )}
+          <div className="absolute inset-0 bg-background/0 group-hover:bg-background/20 transition-colors duration-300" />
+          {category && (
+            <span className="absolute top-2 left-2 px-2 py-0.5 rounded text-[10px] font-medium bg-primary/80 text-primary-foreground">
+              {category}
+            </span>
+          )}
+          {duration && formatDuration(duration) && (
+            <span className="absolute bottom-2 right-2 px-1.5 py-0.5 rounded text-[10px] font-semibold bg-background/85 text-foreground backdrop-blur-sm">
+              {formatDuration(duration)}
+            </span>
+          )}
+        </div>
+        {isYouTubeSkin ? (
+          <div className="flex items-start gap-3">
+            <div className="flex h-9 w-9 shrink-0 items-center justify-center overflow-hidden rounded-full bg-secondary text-xs font-semibold text-foreground">
+              {creatorAvatar ? <img src={creatorAvatar} alt="" className="h-full w-full object-cover" /> : creator.slice(0, 1).toUpperCase()}
+            </div>
+            <div className="min-w-0">
+              <h3 className="mb-1 line-clamp-2 text-sm font-semibold leading-snug text-foreground group-hover:text-primary">{title}</h3>
+              <p className="truncate text-xs text-muted-foreground">{creator}</p>
+              <p className="line-clamp-2 text-xs text-muted-foreground">{views} views · {date}</p>
+            </div>
+          </div>
         ) : (
-          <div className="w-full h-full" style={{ background: gradient || 'linear-gradient(135deg, hsl(187 85% 53% / 0.3), hsl(225 25% 15%))' }} />
+          <>
+            <h3 className="font-semibold text-foreground text-sm leading-snug mb-1 line-clamp-2 group-hover:text-primary transition-colors">{title}</h3>
+            <p className="text-xs text-muted-foreground mb-1">{creator}</p>
+            <div className="flex items-center gap-3 text-xs text-muted-foreground">
+              <span className="flex items-center gap-1"><Eye className="w-3 h-3" /> {views}</span>
+              <span className="flex items-center gap-1"><Clock className="w-3 h-3" /> {date}</span>
+            </div>
+          </>
         )}
-        <div className="absolute inset-0 bg-background/0 group-hover:bg-background/20 transition-colors duration-300" />
-        {category && (
-          <span className="absolute top-2 left-2 px-2 py-0.5 rounded text-[10px] font-medium bg-primary/80 text-primary-foreground">
-            {category}
-          </span>
-        )}
-        {duration && formatDuration(duration) && (
-          <span className="absolute bottom-2 right-2 px-1.5 py-0.5 rounded text-[10px] font-semibold bg-background/85 text-foreground backdrop-blur-sm">
-            {formatDuration(duration)}
-          </span>
-        )}
-      </div>
-      <h3 className="font-semibold text-foreground text-sm leading-snug mb-1 line-clamp-2 group-hover:text-primary transition-colors">
-        {title}
-      </h3>
-      <p className="text-xs text-muted-foreground mb-1">{creator}</p>
-      <div className="flex items-center gap-3 text-xs text-muted-foreground">
-        <span className="flex items-center gap-1"><Eye className="w-3 h-3" /> {views}</span>
-        <span className="flex items-center gap-1"><Clock className="w-3 h-3" /> {date}</span>
-      </div>
-    </Link>
-  </motion.div>
-);
+      </Link>
+    </motion.div>
+  );
+};
 
 export default VideoCard;

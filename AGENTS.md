@@ -1,0 +1,1 @@
+- Keep the site-wide visual skin in `SiteSkinProvider` and persist its admin-controlled choice through the existing `platform_settings` table, because that table already provides public reads and admin-only writes.

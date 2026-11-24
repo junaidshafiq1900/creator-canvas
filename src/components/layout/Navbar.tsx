@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/button';
 import { useState } from 'react';
 import { useTheme } from 'next-themes';
 import { useUnreadCount } from '@/hooks/useNotifications';
+import { useSiteSkin } from '@/contexts/SiteSkinContext';
 import {
   DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger
 } from '@/components/ui/dropdown-menu';
@@ -13,6 +14,8 @@ const Navbar = () => {
   const { user, signOut } = useAuth();
   const navigate = useNavigate();
   const { theme, setTheme } = useTheme();
+  const { skin, toggleSidebar } = useSiteSkin();
+  const isYouTubeSkin = skin === 'youtube';
   const [mobileOpen, setMobileOpen] = useState(false);
   const [search, setSearch] = useState('');
   const { count: unreadCount } = useUnreadCount();
@@ -27,8 +30,19 @@ const Navbar = () => {
   };
 
   return (
-    <nav className="fixed top-0 left-0 right-0 z-50 glass">
+    <nav className={`fixed top-0 left-0 right-0 z-50 ${isYouTubeSkin ? 'border-b border-border bg-background/95 backdrop-blur' : 'glass'}`}>
       <div className="container mx-auto px-4 h-16 flex items-center justify-between gap-4">
+        {isYouTubeSkin && (
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={toggleSidebar}
+            aria-label="Toggle navigation sidebar"
+            className="hidden md:inline-flex shrink-0"
+          >
+            <Menu className="h-5 w-5" />
+          </Button>
+        )}
         <Link to="/" className="flex items-center gap-2.5 shrink-0">
           <div className="w-9 h-9 rounded-lg bg-gradient-to-br from-slate-300 to-slate-500 flex items-center justify-center shadow-lg">
             <span className="text-slate-900 font-black text-base">J</span>
@@ -36,15 +50,20 @@ const Navbar = () => {
           <span className="text-xl font-bold text-foreground tracking-tight">Joulecorp</span>
         </Link>
 
-        <form onSubmit={handleSearch} className="hidden md:flex items-center flex-1 max-w-lg">
-          <div className="relative w-full">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+        <form onSubmit={handleSearch} className={`hidden md:flex items-center flex-1 ${isYouTubeSkin ? 'max-w-2xl' : 'max-w-lg'}`}>
+          <div className="relative flex w-full items-center">
+            {!isYouTubeSkin && <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />}
             <input
               value={search}
               onChange={e => setSearch(e.target.value)}
               placeholder="Search videos, creators..."
-              className="w-full pl-10 pr-4 py-2 rounded-full bg-secondary border border-border text-foreground text-sm placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/40 transition-all"
+              className={`w-full py-2 bg-secondary border border-border text-foreground text-sm placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/40 transition-all ${isYouTubeSkin ? 'pl-4 pr-3 rounded-l-full rounded-r-none' : 'pl-10 pr-4 rounded-full'}`}
             />
+            {isYouTubeSkin && (
+              <Button type="submit" variant="secondary" size="icon" aria-label="Search" className="rounded-l-none rounded-r-full border border-l-0 border-border">
+                <Search className="h-4 w-4" />
+              </Button>
+            )}
           </div>
         </form>
 

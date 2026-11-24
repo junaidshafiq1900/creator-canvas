@@ -9,6 +9,7 @@ import { Skeleton } from '@/components/ui/skeleton';
 import { Flame, TrendingUp, Users, Layers, Star, Clock } from 'lucide-react';
 import { VIDEO_CATEGORIES } from '@/types/database';
 import { motion } from 'framer-motion';
+import { useSiteSkin } from '@/contexts/SiteSkinContext';
 
 const formatCount = (n: number) => {
   if (n >= 1_000_000) return `${(n / 1_000_000).toFixed(1)}M`;
@@ -17,6 +18,8 @@ const formatCount = (n: number) => {
 };
 
 const Index = () => {
+  const { skin } = useSiteSkin();
+  const isYouTubeSkin = skin === 'youtube';
   const [trending, setTrending] = useState<any[]>([]);
   const [featured, setFeatured] = useState<any[]>([]);
   const [latest, setLatest] = useState<any[]>([]);
@@ -46,11 +49,11 @@ const Index = () => {
     load();
   }, []);
 
-  const renderVideoGrid = (videos: any[], cols = 4) => {
+  const renderVideoGrid = (videos: any[], youtubeDensity = false) => {
     if (loading) {
       return (
-        <div className={`grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-${cols} gap-5`}>
-          {[...Array(cols)].map((_, i) => <Skeleton key={i} className="aspect-video rounded-lg" />)}
+        <div className={`grid grid-cols-1 sm:grid-cols-2 gap-5 ${youtubeDensity ? 'lg:grid-cols-3 xl:grid-cols-4' : 'lg:grid-cols-4'}`}>
+          {[...Array(youtubeDensity ? 8 : 4)].map((_, i) => <Skeleton key={i} className="aspect-video rounded-lg" />)}
         </div>
       );
     }
@@ -58,7 +61,7 @@ const Index = () => {
       return <p className="text-sm text-muted-foreground py-8 text-center">No videos yet. Be the first to upload!</p>;
     }
     return (
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+      <div className={`grid grid-cols-1 sm:grid-cols-2 gap-x-5 gap-y-8 ${youtubeDensity ? 'lg:grid-cols-3 xl:grid-cols-4' : 'lg:grid-cols-4'}`}>
         {videos.map(v => {
           const p = (v as any).profiles;
           return (
@@ -68,6 +71,7 @@ const Index = () => {
               title={v.title}
               thumbnail={v.thumbnail_url}
               creator={p?.display_name || p?.username || 'Unknown'}
+              creatorAvatar={p?.avatar_url}
               views={formatCount(v.views || 0)}
               date={new Date(v.created_at).toLocaleDateString()}
               category={v.category}
@@ -83,10 +87,10 @@ const Index = () => {
 
   return (
     <div className="min-h-screen">
-      <HeroSection />
+      {!isYouTubeSkin && <HeroSection />}
 
       {/* Categories */}
-      <section className="container mx-auto px-4 -mt-8 relative z-10 mb-12">
+      <section className={`container mx-auto px-4 relative z-10 mb-8 ${isYouTubeSkin ? 'pt-20' : '-mt-8 mb-12'}`}>
         <div className="flex gap-2 overflow-x-auto pb-2 scrollbar-hide">
           {VIDEO_CATEGORIES.slice(0, 12).map(cat => (
             <Button key={cat} variant="secondary" size="sm" className="shrink-0 rounded-full text-xs">
@@ -96,6 +100,22 @@ const Index = () => {
         </div>
       </section>
 
+      {isYouTubeSkin ? (
+        <>
+          <section className="container mx-auto px-4 mb-12">
+            <div className="mb-5 flex items-center gap-2">
+              <Flame className="h-5 w-5 text-accent" />
+              <h1 className="text-xl font-bold text-foreground">Recommended videos</h1>
+            </div>
+            {renderVideoGrid(
+              [...trending, ...latest].filter((video, index, videos) => videos.findIndex(item => item.id === video.id) === index).slice(0, 24),
+              true,
+            )}
+          </section>
+          <AdSlot slot="home-bottom" format="horizontal" className="container mx-auto px-4 mb-8" />
+        </>
+      ) : (
+        <>
       <AdSlot slot="home-top" format="horizontal" className="container mx-auto px-4 mb-8" />
 
       {/* Trending */}
@@ -186,6 +206,8 @@ const Index = () => {
           </div>
         </div>
       </section>
+        </>
+      )}
     </div>
   );
 };
