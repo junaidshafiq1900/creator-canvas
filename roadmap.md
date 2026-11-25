@@ -37,3 +37,8 @@
 - [x] Use the existing platform settings access rules for public reads and admin-only changes
 - [x] Add a compact recommendation feed, creator metadata, and collapsible desktop navigation
 - [x] Verify skin parsing tests and desktop/mobile layout behavior
+
+## Phase 7 — Selected security findings (in progress)
+- [x] Restrict public platform-setting reads to the active site appearance
+- [x] Bind thumbnail upload, replacement, and removal to the signed-in owner
+- [ ] Resolve six public profile, comment, like, and follow read policies after visibility choice
