@@ -46,6 +46,7 @@ const AppFrame = () => {
       <div className={cn(
         'min-h-screen',
         skin === 'youtube' && (sidebarExpanded ? 'md:ml-52' : 'md:ml-16'),
+        skin === 'youtube' && 'pb-20 md:pb-0',
       )}>
         <Routes>
           <Route path="/" element={<Index />} />

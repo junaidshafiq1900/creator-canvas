@@ -17,6 +17,7 @@ const Navbar = () => {
   const { skin, toggleSidebar } = useSiteSkin();
   const isYouTubeSkin = skin === 'youtube';
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [mobileSearchOpen, setMobileSearchOpen] = useState(false);
   const [search, setSearch] = useState('');
   const { count: unreadCount } = useUnreadCount();
 
@@ -26,19 +27,20 @@ const Navbar = () => {
       navigate(`/search?q=${encodeURIComponent(search.trim())}`);
       setSearch('');
       setMobileOpen(false);
+      setMobileSearchOpen(false);
     }
   };
 
   return (
     <nav className={`fixed top-0 left-0 right-0 z-50 ${isYouTubeSkin ? 'border-b border-border bg-background/95 backdrop-blur' : 'glass'}`}>
-      <div className="container mx-auto px-4 h-16 flex items-center justify-between gap-4">
+      <div className={`h-16 flex items-center justify-between gap-4 px-4 md:px-6 ${isYouTubeSkin ? 'w-full max-w-none' : 'container mx-auto'}`}>
         {isYouTubeSkin && (
           <Button
             variant="ghost"
             size="icon"
             onClick={toggleSidebar}
             aria-label="Toggle navigation sidebar"
-            className="hidden md:inline-flex shrink-0"
+            className="shrink-0"
           >
             <Menu className="h-5 w-5" />
           </Button>
@@ -79,15 +81,19 @@ const Navbar = () => {
           </Button>
           {user ? (
             <>
-              <Button variant="ghost" size="sm" onClick={() => navigate('/videos')} className="text-muted-foreground hover:text-foreground">
-                <Compass className="w-4 h-4 mr-1.5" /> Explore
-              </Button>
-              <Button variant="ghost" size="sm" onClick={() => navigate('/subscriptions')} className="text-muted-foreground hover:text-foreground">
-                <Users className="w-4 h-4 mr-1.5" /> Subscriptions
-              </Button>
-              <Button variant="ghost" size="sm" onClick={() => navigate('/playlists')} className="text-muted-foreground hover:text-foreground">
-                <ListVideo className="w-4 h-4 mr-1.5" /> Playlists
-              </Button>
+              {!isYouTubeSkin && (
+                <>
+                  <Button variant="ghost" size="sm" onClick={() => navigate('/videos')} className="text-muted-foreground hover:text-foreground">
+                    <Compass className="w-4 h-4 mr-1.5" /> Explore
+                  </Button>
+                  <Button variant="ghost" size="sm" onClick={() => navigate('/subscriptions')} className="text-muted-foreground hover:text-foreground">
+                    <Users className="w-4 h-4 mr-1.5" /> Subscriptions
+                  </Button>
+                  <Button variant="ghost" size="sm" onClick={() => navigate('/playlists')} className="text-muted-foreground hover:text-foreground">
+                    <ListVideo className="w-4 h-4 mr-1.5" /> Playlists
+                  </Button>
+                </>
+              )}
               <Button variant="ghost" size="icon" onClick={() => navigate('/upload')} className="text-muted-foreground hover:text-primary">
                 <Upload className="w-5 h-5" />
               </Button>
@@ -136,12 +142,52 @@ const Navbar = () => {
           )}
         </div>
 
-        <button className="md:hidden text-foreground" onClick={() => setMobileOpen(!mobileOpen)}>
-          {mobileOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
-        </button>
+        {isYouTubeSkin ? (
+          <div className="flex shrink-0 items-center gap-1 md:hidden">
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={() => setMobileSearchOpen(open => !open)}
+              aria-label="Search"
+            >
+              <Search className="h-5 w-5" />
+            </Button>
+            <Button variant="ghost" size="icon" onClick={() => navigate('/notifications')} aria-label="Notifications" className="relative">
+              <Bell className="h-5 w-5" />
+              {unreadCount > 0 && (
+                <span className="absolute right-0 top-0 flex h-4 min-w-4 items-center justify-center rounded-full bg-destructive px-1 text-[10px] font-bold text-destructive-foreground">
+                  {unreadCount > 9 ? '9+' : unreadCount}
+                </span>
+              )}
+            </Button>
+            <Button variant="ghost" size="icon" onClick={() => navigate(user ? '/profile' : '/login')} aria-label={user ? 'Profile' : 'Log in'}>
+              <User className="h-5 w-5" />
+            </Button>
+          </div>
+        ) : (
+          <Button variant="ghost" size="icon" className="md:hidden" onClick={() => setMobileOpen(!mobileOpen)} aria-label={mobileOpen ? 'Close menu' : 'Open menu'}>
+            {mobileOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+          </Button>
+        )}
       </div>
 
-      {mobileOpen && (
+      {isYouTubeSkin && mobileSearchOpen && (
+        <form onSubmit={handleSearch} className="flex items-center gap-2 border-t border-border bg-background px-4 py-3 md:hidden">
+          <input
+            autoFocus
+            value={search}
+            onChange={e => setSearch(e.target.value)}
+            placeholder="Search videos, creators..."
+            aria-label="Search videos and creators"
+            className="min-w-0 flex-1 rounded-full border border-border bg-secondary px-4 py-2 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/40"
+          />
+          <Button type="submit" variant="secondary" size="icon" aria-label="Submit search">
+            <Search className="h-4 w-4" />
+          </Button>
+        </form>
+      )}
+
+      {mobileOpen && !isYouTubeSkin && (
         <div className="md:hidden bg-card border-t border-border p-4 space-y-2 animate-fade-in">
           <form onSubmit={handleSearch} className="relative mb-3">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />

@@ -42,3 +42,9 @@
 - [x] Restrict public platform-setting reads to the active site appearance
 - [x] Bind thumbnail upload, replacement, and removal to the signed-in owner
 - [ ] Resolve six public profile, comment, like, and follow read policies after visibility choice
+
+## Phase 8 — YouTube-style responsive navigation (in progress)
+- [ ] Make the YouTube-skin header edge-to-edge and mobile-friendly
+- [ ] Add desktop left navigation, a mobile drawer, and sticky bottom navigation
+- [ ] Keep the existing footer and expand its inner content to the available page width
+- [ ] Verify desktop and mobile navigation behavior

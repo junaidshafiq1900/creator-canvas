@@ -1,8 +1,13 @@
 import { Link } from 'react-router-dom';
+import { useSiteSkin } from '@/contexts/SiteSkinContext';
+import { cn } from '@/lib/utils';
 
-const Footer = () => (
-  <footer className="border-t border-border py-10 mt-16">
-    <div className="container mx-auto px-4">
+const Footer = () => {
+  const { skin } = useSiteSkin();
+
+  return (
+  <footer className="mt-16 w-full border-t border-border py-10">
+    <div className={cn('mx-auto px-4', skin === 'youtube' ? 'w-full max-w-none md:px-6' : 'container')}>
       <div className="grid grid-cols-2 md:grid-cols-4 gap-8 mb-8">
         <div>
           <div className="flex items-center gap-2 mb-4">
@@ -44,6 +49,7 @@ const Footer = () => (
       </div>
     </div>
   </footer>
-);
+  );
+};
 
 export default Footer;

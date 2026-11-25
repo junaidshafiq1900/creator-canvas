@@ -1,1 +1,2 @@
 - Keep the site-wide visual skin in `SiteSkinProvider` and persist its admin-controlled choice through the existing `platform_settings` table, because that table already provides public reads and admin-only writes.
+- Keep YouTube-skin desktop and mobile navigation in the existing layout components and scope it to the active skin, so site-wide appearance remains consistent across routes.
