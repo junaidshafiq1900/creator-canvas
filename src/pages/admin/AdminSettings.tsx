@@ -81,7 +81,7 @@ const AdminSettings = () => {
       <h1 className="text-2xl font-bold text-foreground mb-6">Settings</h1>
 
       <Tabs defaultValue="supabase" className="max-w-2xl">
-        <TabsList className="mb-6 w-full justify-start">
+        <TabsList className="mb-6 w-full justify-start overflow-x-auto">
           <TabsTrigger value="supabase"><Database className="w-4 h-4 mr-1.5" /> Supabase</TabsTrigger>
           <TabsTrigger value="storage"><HardDrive className="w-4 h-4 mr-1.5" /> Storage</TabsTrigger>
           <TabsTrigger value="appearance"><PanelsTopLeft className="w-4 h-4 mr-1.5" /> Appearance</TabsTrigger>

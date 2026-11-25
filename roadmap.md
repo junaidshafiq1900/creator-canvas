@@ -31,3 +31,9 @@
 
 ## Fixes found during build
 - [x] Signed-out browsing was broken: admin RLS policies evaluated private.has_role for anon → recreated 14 policies scoped TO authenticated
+
+## Phase 6 — Switchable Site Skin (done)
+- [x] Add an admin-controlled site-wide Joulecorp / YouTube-inspired layout setting
+- [x] Use the existing platform settings access rules for public reads and admin-only changes
+- [x] Add a compact recommendation feed, creator metadata, and collapsible desktop navigation
+- [x] Verify skin parsing tests and desktop/mobile layout behavior
