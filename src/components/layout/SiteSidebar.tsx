@@ -20,7 +20,7 @@ const MOBILE_ITEMS = [
 ];
 
 const SiteSidebar = () => {
-  const { skin, sidebarExpanded } = useSiteSkin();
+  const { skin, sidebarExpanded, toggleSidebar } = useSiteSkin();
   const location = useLocation();
 
   if (skin !== 'youtube') return null;
